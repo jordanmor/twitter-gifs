@@ -1,0 +1,242 @@
+/*============-============-============-============
+                         VARIABLES
+==============-============-============-==========*/
+
+:root {
+  --calm: #5F6BA0;
+  --calm-darker: #354487;
+  --calm-border-light: rgba(95, 107, 160, 0.25);
+  --off-white: #fafafa;
+}
+
+/*============-============-============-============
+                         GLOBAL
+==============-============-============-==========*/
+
+i {
+  font-size: 1.4rem;
+  color: var(--calm);
+  cursor: pointer;
+}
+
+i + i {
+  margin-left: 1rem;
+}
+
+/* --- Buttons --- */
+
+.btn-primary {
+  background-color: var(--calm);
+  border-color: var(--calm);
+  color: var(--off-white);
+}
+
+.btn-primary:hover {
+  background-color: var(--calm-darker);
+  border-color: var(--calm-darker);
+}
+
+.btn-outline-secondary {
+  color: var(--calm);
+  border-color: var(--calm);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:not(:disabled):not(.disabled).active {
+  background-color: var(--calm);
+  border-color: var(--calm);
+}
+
+/*============-============-============-============
+                        NAVBAR
+==============-============-============-==========*/
+
+/* --- Nav Top --- */
+
+.nav-top {
+  background-color: var(--calm);
+  color: #fff;
+}
+
+.navbar {
+  background-color: var(--calm);
+  padding: .75rem 0;
+  position: relative;
+}
+
+.navbar-brand {
+  font-family: 'Luckiest Guy', cursive;
+  letter-spacing: .1rem;
+  font-size: 1.4rem;
+  font-weight: bold;
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%); 
+  color: var(--off-white);
+}
+
+.navbar-collapse {
+  justify-content: space-between;
+}  
+
+.login i,
+.login > a {
+  color: var(--off-white);
+}
+
+/* --- Search Form --- */
+
+.form-inline .form-control {
+  display: block;
+  width: 100%;
+}
+
+/* --- Nav Bottom --- */
+
+.nav-bottom {
+  padding: 1rem 0;
+  flex-direction: column;
+}
+
+.nav-bottom button {
+  display: block;
+  width: 100%;
+  margin-bottom: .5rem;
+}
+
+.lead {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.favorites .badge-secondary {
+  color: var(--calm);
+  background-color: var(--off-white);
+  border: 1px solid var(--calm);
+  margin-left: .25rem;
+}
+
+/*============-============-============-============
+                         MAIN
+==============-============-============-==========*/
+
+.album {
+  padding: 1rem;
+}
+
+.card {
+  border-color: var(--calm-border-light);
+}
+
+.card-img-top {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.card-columns {
+  column-count: 1;
+}
+
+.fa-twitter {
+  color: var(--calm);
+  transition: .3s ease-out;
+}
+
+.fa-twitter:hover {
+  color: var(--calm-darker);
+}
+
+/*============-============-============-============
+                        FOOTER
+==============-============-============-==========*/
+
+footer {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+footer p {
+  margin-bottom: .25rem;
+}
+
+/*============-============-============-============
+                     MEDIA QUERIES
+==============-============-============-==========*/
+
+@media (max-width: 767px) {
+  .navbar {
+    height: 110px;
+    align-items: flex-start;
+  }
+  .form-inline .form-control {
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+    left: 0;
+  }
+}
+
+@media (min-width: 601px) {
+  .card-columns {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 768px) {
+  .form-inline .form-control {
+    display: inline-block;
+  }
+  .nav-bottom {
+    padding: .65rem 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-bottom button {
+    display: inline-block;
+    width: auto;
+    margin-bottom: 0;
+  }
+  .nav-bottom .nav-item + .nav-item {
+    margin-left: .5rem;
+  }
+  .lead {
+    display: block;
+    width: 100%;
+  }
+  .favorites .badge-secondary {
+    margin-left: .5rem;
+  }
+  /* --- Main --- */
+  .card-columns {
+    column-count: 3;
+  }
+}
+
+
+@media (min-width: 992px) {
+
+  .form-inline .form-control {
+    width: 300px;
+  }
+  .nav-bottom {
+    padding: .85rem 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: none;
+  }
+  .lead {
+    display: inline-block;
+    width: auto;
+    margin: 0;
+    margin-right: auto;
+  }
+  /* --- Main --- */
+  .album {
+    padding: 1.8rem;
+  }
+  .card-columns {
+    column-count: 4;
+  }
+}
