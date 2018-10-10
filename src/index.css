@@ -94,7 +94,7 @@ i + i {
 
 /* --- Nav Bottom --- */
 
-.nav-bottom {
+.nav-bottom .nav {
   padding: 1rem 0;
   flex-direction: column;
 }
@@ -121,7 +121,7 @@ i + i {
                          MAIN
 ==============-============-============-==========*/
 
-.album {
+.gallery {
   padding: 1rem;
 }
 
@@ -187,7 +187,7 @@ footer p {
   .form-inline .form-control {
     display: inline-block;
   }
-  .nav-bottom {
+  .nav-bottom .nav {
     padding: .65rem 0;
     flex-direction: row;
     align-items: center;
@@ -214,12 +214,13 @@ footer p {
   }
 }
 
+
 @media (min-width: 992px) {
 
   .form-inline .form-control {
     width: 300px;
   }
-  .nav-bottom {
+  .nav-bottom .nav {
     padding: .85rem 0;
     flex-direction: row;
     align-items: center;
@@ -232,7 +233,7 @@ footer p {
     margin-right: auto;
   }
   /* --- Main --- */
-  .album {
+  .gallery {
     padding: 1.8rem;
   }
   .card-columns {
