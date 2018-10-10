@@ -1,3 +1,16 @@
+## Twitter Gifs
+
+The latest Twitter trends matched with gifs
+
+Treehouse Full Stack JavaScript Techdegree - Project 12
+
+**Main Project Goals**
+
+---
+**Installation Instructions:**
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
