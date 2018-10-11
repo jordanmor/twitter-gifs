@@ -1,15 +1,15 @@
+const config = require('config');
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const users = require('./routes/users');
 const favorites = require('./routes/favorites');
+const port = process.env.PORT || 5000;
 const app = express();
 
-// set our port
-app.set('port', process.env.PORT || 5000);
-
+const mongodbUri = config.get('mongodbUri');
 //Mongoose connection
-mongoose.connect('mongodb://localhost/twitter-gif', { useNewUrlParser: true });
+mongoose.connect(mongodbUri, { useNewUrlParser: true });
 
 const db = mongoose.connection;
 
@@ -58,6 +58,6 @@ app.use((err, req, res, next) => {
 });
 
 // start listening on our port
-const server = app.listen(app.get('port'), () => {
-  console.log(`Express server is listening on port ${server.address().port}`);
+app.listen(port, () => {
+  console.log(`Express server is listening on port ${port}`);
 });
