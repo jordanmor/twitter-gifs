@@ -1,6 +1,6 @@
-## Twitter Gifs
+## Twitter GIFs
 
-The latest Twitter trends matched with gifs
+The latest Twitter trends matched with GIFs
 
 Treehouse Full Stack JavaScript Techdegree - Project 12 (Capstone Project)
 
