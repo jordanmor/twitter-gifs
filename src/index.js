@@ -9,7 +9,7 @@ const app = express();
 app.set('port', process.env.PORT || 5000);
 
 //Mongoose connection
-mongoose.connect('mongodb://localhost/course-api', { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost/twitter-gif', { useNewUrlParser: true });
 
 const db = mongoose.connection;
 

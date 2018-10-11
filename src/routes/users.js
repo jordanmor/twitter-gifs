@@ -1,13 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const { User } = require('../models/user');
 
-router.get('/', (req, res) => {
-  const users = [
-    {id: 1, name: 'User1'},
-    {id: 2, name: 'User2'},
-    {id: 3, name: 'User3'},
-    {id: 4, name: 'User4'}
-  ];
+router.get('/', async (req, res) => {
+  const users = await User.find();
   res.json(users);
 });
 

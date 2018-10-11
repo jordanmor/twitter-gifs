@@ -1,13 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const { Favorite } = require('../models/favorite');
 
-router.get('/', (req, res) => {
-  const favorites = [
-    {id: 1, name: 'Favorite1'},
-    {id: 2, name: 'Favorite2'},
-    {id: 3, name: 'Favorite3'},
-    {id: 4, name: 'Favorite4'}
-  ];
+router.get('/', async (req, res) => {
+  const favorites = await Favorite.find();
   res.json(favorites);
 });
 
