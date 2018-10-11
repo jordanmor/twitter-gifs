@@ -1,11 +1,15 @@
 {
-  "name": "twitter-gifs-react",
+  "name": "twitter-gifs",
   "version": "1.0.0",
-  "description": "",
+  "description": "The latest Twitter trends matched with GIFs",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "engines": {
+    "node": "10.11.0"
   },
   "repository": {
     "type": "git",
