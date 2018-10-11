@@ -8,35 +8,35 @@ class App extends Component {
 
   // Fetch passwords after first mount
   componentDidMount() {
-    this.getColors();
+    this.getFavorites();
   }
 
   getColors = () => {
     // Get the info from api and store in state
-    fetch('/api/colors')
+    fetch('/api/favorites')
       .then(res => res.json())
-      .then(colors => this.setState({ colors }));
+      .then(favorites => this.setState({ favorites }));
   }
 
   render() {
-    const { colors } = this.state;
+    const { favorites } = this.state;
 
     return (
       <div className="App">
         {/* Render the passwords if we have them */}
-        {colors.length ? (
+        {favorites.length ? (
           <div>
-            <h1>6 colors</h1>
-            <ul className="colors">
+            <h1>6 favorites</h1>
+            <ul className="favorites">
               {/*
                 Generally it's bad to use "index" as a key.
                 It's ok for this example because there will always
-                be the same number of colors, and they never
+                be the same number of favorites, and they never
                 change positions in the array.
               */}
-              {colors.map((color, index) =>
+              {favorites.map((favorite, index) =>
                 <li key={index}>
-                  {color}
+                  {favorite}
                 </li>
               )}
             </ul>
@@ -44,7 +44,7 @@ class App extends Component {
         ) : (
           // Render a helpful message otherwise
           <div>
-            <h1>No colors :(</h1>
+            <h1>No favorites :(</h1>
           </div>
         )}
       </div>
