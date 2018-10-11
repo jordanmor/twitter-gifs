@@ -3,50 +3,57 @@ import React, { Component } from 'react';
 class App extends Component {
 
   state = { 
-    colors: [] 
+    favorites: [],
+    users: []
   }
 
   // Fetch passwords after first mount
   componentDidMount() {
     this.getFavorites();
+    this.getUsers();
   }
 
-  getColors = () => {
-    // Get the info from api and store in state
+  getFavorites = () => {
+    // Get favorites from api and store in state
     fetch('/api/favorites')
       .then(res => res.json())
       .then(favorites => this.setState({ favorites }));
   }
 
+  getUsers = () => {
+    // Get users from api and store in state
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(users => this.setState({ users }));
+  }
+
   render() {
-    const { favorites } = this.state;
+    const { favorites, users } = this.state;
 
     return (
       <div className="App">
-        {/* Render the passwords if we have them */}
-        {favorites.length ? (
+        <div className="container">
           <div>
-            <h1>6 favorites</h1>
+            <h1>{favorites.length} favorites</h1>
             <ul className="favorites">
-              {/*
-                Generally it's bad to use "index" as a key.
-                It's ok for this example because there will always
-                be the same number of favorites, and they never
-                change positions in the array.
-              */}
-              {favorites.map((favorite, index) =>
-                <li key={index}>
-                  {favorite}
+              {favorites.map( favorite =>
+                <li key={favorite.id}>
+                  {favorite.name}
                 </li>
               )}
             </ul>
           </div>
-        ) : (
-          // Render a helpful message otherwise
           <div>
-            <h1>No favorites :(</h1>
+            <h1>{users.length} users</h1>
+            <ul className="users">
+              {users.map( user =>
+                <li key={user.id}>
+                  {user.name}
+                </li>
+              )}
+            </ul>
           </div>
-        )}
+        </div>
       </div>
     );
   }

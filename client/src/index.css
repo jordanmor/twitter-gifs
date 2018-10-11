@@ -13,6 +13,18 @@
                          GLOBAL
 ==============-============-============-==========*/
 
+body {
+  background-color: #aaa;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
 i {
   font-size: 1.4rem;
   color: var(--calm);
