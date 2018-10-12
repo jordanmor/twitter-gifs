@@ -1,3 +1,3 @@
 {
-  "mongodbUri": "twitter-gifs_db"
+  "mongodbUri": "MONGODB_URI"
 }
