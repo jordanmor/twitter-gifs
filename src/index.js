@@ -24,7 +24,7 @@ db.once('open', () => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static('client/build'));
 
 app.use('/api/users', users);
 app.use('/api/favorites', favorites);
