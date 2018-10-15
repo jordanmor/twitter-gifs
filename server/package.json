@@ -4,11 +4,7 @@
   "description": "The latest Twitter trends matched with GIFs",
   "main": "src/index.js",
   "scripts": {
-    "start": "node ./src/index.js",
-    "heroku-postbuild": "cd client && npm install && npm run build"
-  },
-  "engines": {
-    "node": "10.11.0"
+    "start": "node ./src/index.js"
   },
   "repository": {
     "type": "git",
