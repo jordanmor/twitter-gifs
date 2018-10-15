@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const Giphys = ({ giphys }) => {
   return ( 
@@ -12,7 +11,6 @@ const Giphys = ({ giphys }) => {
           </li>
         )}
       </ul>
-      <Link to="/favorites" className="btn btn-primary">Favorites</Link>
     </div>
    );
 }

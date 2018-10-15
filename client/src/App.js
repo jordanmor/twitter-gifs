@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
+import Nav from './components/nav';
 import Favorites from './components/favorites';
 import Users from './components/users';
 import Giphys from './components/giphys';
+import RandomWords from './components/randomWords';
+// import TwitterTrends from './components/twitterTrends';
 
 class App extends Component {
 
@@ -39,11 +42,23 @@ class App extends Component {
     fetch(`https://api.giphy.com/v1/gifs/search?q=${searchTopic}&limit=5&api_key=${giphyApiKey}`)
     .then(res => res.json())
     .then(data => {
-      console.log(data.data);
       const giphys = data.data.map(giphy => ({ id: giphy.id, image: giphy.images.fixed_height.url, title: giphy.title }));
       this.setState({ giphys });
     })
   }
+
+  // getTwitterTrends = () => {
+  //   const twitterApiKey = process.env.REACT_APP_TWITTER_APIKEY;
+  //   // United States
+  //   const woeid = '23424977';
+
+  //   fetch(`https://api.twitter.com/1.1/trends/available.json?id=${woeid}&api_key=${twitterApiKey}`)
+  //   .then(res => res.json())
+  //   .then(data => {
+  //     const randomWords = data.map(item => ({ id: item.id, word: item.word }));
+  //     this.setState({ randomWords });
+  //   })
+  // }
 
   getFavorites = () => {
     // Get favorites from api and store in state
@@ -65,7 +80,8 @@ class App extends Component {
     return (
       <div className="App">
         <div className="container">
-          <h1>Result: {process.env.REACT_APP_HOST}</h1>
+          <h1>Host: {process.env.REACT_APP_HOST}</h1>
+          <Nav />
           <Switch>
             <Route 
               path="/favorites"
@@ -89,6 +105,20 @@ class App extends Component {
                   giphys={giphys}
                 />}
             />
+            <Route 
+              path="/randomWords"
+              render={() => 
+                <RandomWords 
+                  randomWords={randomWords}
+                />}
+            />
+            {/* <Route 
+              path="/twitterTrends"
+              render={() => 
+                <TwitterTrends 
+                  twitterTrends={twitterTrends}
+                />}
+            /> */}
           </Switch>
         </div>
       </div>
