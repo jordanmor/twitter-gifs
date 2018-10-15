@@ -24,7 +24,7 @@
     "url": "https://github.com/jordanmor/twitter-gifs/issues"
   },
   "homepage": "https://github.com/jordanmor/twitter-gifs#readme",
-  "dependencies": {
+  "devDependencies": {
     "concurrently": "^4.0.1",
     "nodemon": "^1.18.4"
   }
