@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Favorites from './components/favorites';
 import Users from './components/users';
+import Giphys from './components/giphys';
 
 class App extends Component {
 
   state = { 
     favorites: [],
     users: [],
-    randomWords: []
+    randomWords: [],
+    giphys: []
   }
 
   // Fetch passwords after first mount
@@ -16,6 +18,7 @@ class App extends Component {
     this.getFavorites();
     this.getUsers();
     this.getRandomWords();
+    this.getGiphys();
   }
 
   getRandomWords = () => {
@@ -26,6 +29,19 @@ class App extends Component {
     .then(data => {
       const randomWords = data.map(item => ({ id: item.id, word: item.word }));
       this.setState({ randomWords });
+    })
+  }
+
+  getGiphys = () => {
+    const giphyApiKey = process.env.REACT_APP_GIPHY_APIKEY;
+    const searchTopic = 'cats';
+    // Get giphys from GIPHY API
+    fetch(`https://api.giphy.com/v1/gifs/search?q=${searchTopic}&limit=5&api_key=${giphyApiKey}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data.data);
+      const giphys = data.data.map(giphy => ({ id: giphy.id, image: giphy.images.fixed_height.url, title: giphy.title }));
+      this.setState({ giphys });
     })
   }
 
@@ -44,16 +60,16 @@ class App extends Component {
   }
 
   render() {
-    const { favorites, users, randomWords } = this.state;
+    const { favorites, users, randomWords, giphys } = this.state;
 
     return (
       <div className="App">
         <div className="container">
-          <h1>Result: {process.env.REACT_APP_TEST}</h1>
+          <h1>Result: {process.env.REACT_APP_HOST}</h1>
           <Switch>
             <Route 
               path="/favorites"
-              render={props => 
+              render={() => 
                 <Favorites 
                   favorites={favorites}
                   randomWords={randomWords}
@@ -61,9 +77,16 @@ class App extends Component {
             />
             <Route 
               path="/users"
-              render={props => 
+              render={() => 
                 <Users 
                   users={users}
+                />}
+            />
+            <Route 
+              path="/giphys"
+              render={() => 
+                <Giphys 
+                  giphys={giphys}
                 />}
             />
           </Switch>
