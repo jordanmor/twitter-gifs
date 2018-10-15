@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import Favorites from './components/favorites';
+import Users from './components/users';
 
 class App extends Component {
 
@@ -33,26 +36,23 @@ class App extends Component {
     return (
       <div className="App">
         <div className="container">
-          <div>
-            <h1>{favorites.length} favorites</h1>
-            <ul className="favorites">
-              {favorites.map( favorite =>
-                <li key={favorite.id}>
-                  {favorite.name}
-                </li>
-              )}
-            </ul>
-          </div>
-          <div>
-            <h1>{users.length} users</h1>
-            <ul className="users">
-              {users.map( user =>
-                <li key={user.id}>
-                  {user.name}
-                </li>
-              )}
-            </ul>
-          </div>
+          <h1>Result: {process.env.REACT_APP_TEST}</h1>
+          <Switch>
+            <Route 
+              path="/favorites"
+              render={props => 
+                <Favorites 
+                  favorites={favorites}
+                />}
+            />
+            <Route 
+              path="/users"
+              render={props => 
+                <Users 
+                  users={users}
+                />}
+            />
+          </Switch>
         </div>
       </div>
     );
