@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "The latest Twitter trends matched with GIFs",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "engines": {
+    "node": "10.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jordanmor/twitter-gifs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jordanmor/twitter-gifs/issues"
+  },
+  "homepage": "https://github.com/jordanmor/twitter-gifs#readme",
+  "dependencies": {
+    "config": "^2.0.1",
+    "express": "^4.16.3",
+    "mongoose": "^5.3.2"
+  }
+}
