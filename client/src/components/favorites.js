@@ -1,14 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Favorites = ({ favorites }) => {
+const Favorites = ({ favorites, randomWords }) => {
   return ( 
     <div>
       <h1>{favorites.length} favorites</h1>
       <ul className="favorites">
         {favorites.map( favorite =>
-          <li key={favorite.id}>
+          <li key={favorite._id}>
             {favorite.name}
+          </li>
+        )}
+      </ul>
+      <h1>{randomWords.length} randomWords</h1>
+      <ul className="randomWords">
+        {randomWords.map( randomWord =>
+          <li key={randomWord.id}>
+            {randomWord.word}
           </li>
         )}
       </ul>

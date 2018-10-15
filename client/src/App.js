@@ -7,13 +7,26 @@ class App extends Component {
 
   state = { 
     favorites: [],
-    users: []
+    users: [],
+    randomWords: []
   }
 
   // Fetch passwords after first mount
   componentDidMount() {
     this.getFavorites();
     this.getUsers();
+    this.getRandomWords();
+  }
+
+  getRandomWords = () => {
+    const wordnikApiKey = process.env.REACT_APP_WORDNIK_APIKEY;
+    // Get random words from Wordnik API
+    fetch(`https://api.wordnik.com/v4/words.json/randomWords?hasDictionaryDef=true&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=20&api_key=${wordnikApiKey}`)
+    .then(res => res.json())
+    .then(data => {
+      const randomWords = data.map(item => ({ id: item.id, word: item.word }));
+      this.setState({ randomWords });
+    })
   }
 
   getFavorites = () => {
@@ -31,7 +44,7 @@ class App extends Component {
   }
 
   render() {
-    const { favorites, users } = this.state;
+    const { favorites, users, randomWords } = this.state;
 
     return (
       <div className="App">
@@ -43,6 +56,7 @@ class App extends Component {
               render={props => 
                 <Favorites 
                   favorites={favorites}
+                  randomWords={randomWords}
                 />}
             />
             <Route 
