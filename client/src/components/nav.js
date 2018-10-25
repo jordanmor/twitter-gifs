@@ -19,6 +19,12 @@ const Nav = () => {
       <li className="nav-item ml-2">
         <Link to="/twitterTrends" className="btn btn-primary">Twitter Trends</Link>
       </li>
+      <li className="nav-item ml-2">
+        <a href="http://localhost:5000" className="btn btn-primary">Login to Twitter</a>
+      </li>
+      <li className="nav-item ml-2">
+        <a href="http://localhost:5000" className="btn btn-primary">Logout</a>
+      </li>
     </ul>
    );
 }

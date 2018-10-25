@@ -77,6 +77,10 @@ class App extends Component {
       <div className="App">
         <div className="container">
           <h1>Host: {process.env.REACT_APP_HOST}</h1>
+          <div className="d-flex align-items-center">
+            <i className="material-icons">person_outline</i>
+            <h3 className="my-0 ml-2">Name</h3>
+          </div>
           <Nav />
           <Switch>
             <Route 
