@@ -16,8 +16,7 @@ router.get('/twitter/return',
 //GET /auth/logout
 router.get('/logout', function(req, res, next){
   req.logout();
-  console.log(req.session);
-  res.redirect('/');
+  res.redirect('http://localhost:3000');
 });
 
 

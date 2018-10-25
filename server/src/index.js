@@ -39,12 +39,10 @@ passport.use(new TwitterStrategy({
 }));
 
 passport.serializeUser(function(user, done){
-  // console.log('Serialize', user);
 	done(null, user._id);
 });
 
 passport.deserializeUser(function(userId, done){
-  // console.log('Deserialize', userId);
 	User.findById(userId, done);
 });
 
@@ -100,11 +98,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/*', staticFiles);
-
-// uncomment this route in order to test the global error handler
-// app.get('/error', function (req, res) {
-//   throw new Error('Test error');
-// });
 
 // send 404 if no other route matched
 app.use((req, res) => {
