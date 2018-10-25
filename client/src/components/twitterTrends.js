@@ -1,13 +1,13 @@
 import React from 'react';
 
-const TwitterTrends = ({ twitterTrends }) => {
+const TwitterTrends = ({ trends }) => {
   return ( 
     <div>
-      <h1>{twitterTrends.length} twitterTrends</h1>
-      <ul className="twitterTrends">
-        {twitterTrends.map( twitterTrend =>
-          <li key={twitterTrend.id}>
-            {twitterTrend.word}
+      <h1>{trends.length} twitterTrends</h1>
+      <ul className="trends">
+        {trends.map( trend =>
+          <li key={trend.id}>
+            {trend.name}
           </li>
         )}
       </ul>

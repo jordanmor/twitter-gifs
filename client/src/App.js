@@ -5,7 +5,7 @@ import Favorites from './components/favorites';
 import Users from './components/users';
 import Giphys from './components/giphys';
 import RandomWords from './components/randomWords';
-// import TwitterTrends from './components/twitterTrends';
+import TwitterTrends from './components/twitterTrends';
 
 class App extends Component {
 
@@ -13,7 +13,8 @@ class App extends Component {
     favorites: [],
     users: [],
     randomWords: [],
-    giphys: []
+    giphys: [],
+    trends: []
   }
 
   // Fetch passwords after first mount
@@ -22,6 +23,7 @@ class App extends Component {
     this.getUsers();
     this.getRandomWords();
     this.getGiphys();
+    this.getTwitterTrends();
   }
 
   getRandomWords = () => {
@@ -47,18 +49,12 @@ class App extends Component {
     })
   }
 
-  // getTwitterTrends = () => {
-  //   const twitterApiKey = process.env.REACT_APP_TWITTER_APIKEY;
-  //   // United States
-  //   const woeid = '23424977';
-
-  //   fetch(`https://api.twitter.com/1.1/trends/available.json?id=${woeid}&api_key=${twitterApiKey}`)
-  //   .then(res => res.json())
-  //   .then(data => {
-  //     const randomWords = data.map(item => ({ id: item.id, word: item.word }));
-  //     this.setState({ randomWords });
-  //   })
-  // }
+  getTwitterTrends = () => {
+    // Get latest Twitter trends from api and store in state
+    fetch('/api/twitter/trends')
+    .then(res => res.json())
+    .then(trends => this.setState({ trends }));
+  }
 
   getFavorites = () => {
     // Get favorites from api and store in state
@@ -75,7 +71,7 @@ class App extends Component {
   }
 
   render() {
-    const { favorites, users, randomWords, giphys } = this.state;
+    const { favorites, users, randomWords, giphys, trends } = this.state;
 
     return (
       <div className="App">
@@ -112,13 +108,13 @@ class App extends Component {
                   randomWords={randomWords}
                 />}
             />
-            {/* <Route 
+            <Route 
               path="/twitterTrends"
               render={() => 
                 <TwitterTrends 
-                  twitterTrends={twitterTrends}
+                  trends={trends}
                 />}
-            /> */}
+            />
           </Switch>
         </div>
       </div>
