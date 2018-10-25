@@ -4,6 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const users = require('./routes/users');
 const favorites = require('./routes/favorites');
+const twitter = require('./routes/twitter');
 const port = process.env.PORT || 5000;
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(staticFiles);
 
 app.use('/api/users', users);
 app.use('/api/favorites', favorites);
+app.use('/api/twitter', twitter);
 
 // send a friendly greeting for the root route
 app.get('/', (req, res) => {
