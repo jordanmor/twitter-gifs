@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const twitterClient = require('../helpers/twitter-client.js');
+const twitterClient = require('../services/twitter-client.js');
 
 router.get('/trends', function(req, res) {
   const woeid = '23424977'; // Yahoo! WOEID for United States

@@ -4,10 +4,8 @@ const path = require('path');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
-const TwitterStrategy = require('passport-twitter').Strategy;
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
-const User = require('./models/user');
 const users = require('./routes/users');
 const favorites = require('./routes/favorites');
 const twitter = require('./routes/twitter');
@@ -15,36 +13,7 @@ const auth = require('./routes/auth');
 const port = process.env.PORT || 5000;
 const app = express();
 
-const twitterConsumerKey = config.get('twitter.consumer_key');
-const twitterConsumerSecret = config.get('twitter.consumer_secret');
-
-passport.use(new TwitterStrategy({
-	consumerKey: twitterConsumerKey,
-	consumerSecret: twitterConsumerSecret,
-  callbackURL: "http://localhost:5000/api/auth/twitter/return"
-  }, 
-  async function(token, tokenSecret, profile, done){
-    const existingUser = await User.findOne({twitterId: profile.id});
-    if (existingUser) {
-      return done(null, existingUser);
-    }
-
-    const user = await new User({
-      twitterId: profile.id,
-      name: profile.displayName,
-      photo: profile.photos[0].value
-    }).save();
-
-    return done(null, user);
-}));
-
-passport.serializeUser(function(user, done){
-	done(null, user._id);
-});
-
-passport.deserializeUser(function(userId, done){
-	User.findById(userId, done);
-});
+require('./services/passport');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
@@ -71,7 +40,7 @@ db.once('open', () => {
 var sessionOptions = {
 	secret: "my secret",
 	resave: true,
-	saveUninitialized: true,
+	saveUninitialized: false,
   store: new MongoStore({
   	mongooseConnection: db
  	})
