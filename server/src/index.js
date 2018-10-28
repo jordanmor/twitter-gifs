@@ -3,9 +3,8 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const passport = require('passport');
-const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
 const users = require('./routes/users');
 const favorites = require('./routes/favorites');
 const twitter = require('./routes/twitter');
@@ -36,21 +35,16 @@ db.once('open', () => {
     console.log('db connection successful');
 });
 
-// Session Configuration for Passport and MongoDB
-var sessionOptions = {
-	secret: "my secret",
-	resave: true,
-	saveUninitialized: false,
-  store: new MongoStore({
-  	mongooseConnection: db
- 	})
-};
-
-app.use(session(sessionOptions));
+const cookieKey = config.get('cookieKey');
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [cookieKey]
+  })
+);
 
 //Initialize Passport.js
 app.use(passport.initialize());
-
 //Restore session
 app.use(passport.session());
 
