@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
-const users = require('./routes/users');
 const favorites = require('./routes/favorites');
 const twitter = require('./routes/twitter');
 const auth = require('./routes/auth');
@@ -48,7 +47,6 @@ app.use(passport.initialize());
 //Restore session
 app.use(passport.session());
 
-app.use('/api/users', users);
 app.use('/api/favorites', favorites);
 app.use('/api/twitter', twitter);
 app.use('/api/auth', auth);
