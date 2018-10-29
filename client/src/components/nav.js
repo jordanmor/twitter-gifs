@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Nav = () => {
+
+  const rootUrl = process.env.REACT_APP_ROOT_URL;
+
   return ( 
     <ul className="nav my-4">
       <li className="nav-item">
@@ -20,10 +23,10 @@ const Nav = () => {
         <Link to="/twitterTrends" className="btn btn-primary">Twitter Trends</Link>
       </li>
       <li className="nav-item ml-2">
-        <a href="http://localhost:5000/api/auth/login/twitter" className="btn btn-primary">Login to Twitter</a>
+        <a href={`${rootUrl}api/auth/login/twitter`} className="btn btn-primary">Login to Twitter</a>
       </li>
       <li className="nav-item ml-2">
-        <a href="http://localhost:5000/api/auth/logout" className="btn btn-primary">Logout</a>
+        <a href={`${rootUrl}api/auth/logout`} className="btn btn-primary">Logout</a>
       </li>
     </ul>
    );
