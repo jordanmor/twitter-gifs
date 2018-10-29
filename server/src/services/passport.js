@@ -2,6 +2,7 @@ const config = require('config');
 const passport = require('passport');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const User = require('../models/user');
+const callbackRootUrl = config.get('callback_root_url');
 
 const twitterConsumerKey = config.get('twitter.consumer_key');
 const twitterConsumerSecret = config.get('twitter.consumer_secret');
@@ -9,7 +10,7 @@ const twitterConsumerSecret = config.get('twitter.consumer_secret');
 passport.use(new TwitterStrategy({
 	consumerKey: twitterConsumerKey,
 	consumerSecret: twitterConsumerSecret,
-  callbackURL: "http://localhost:5000/api/auth/twitter/return"
+  callbackURL: `${callbackRootUrl}api/auth/twitter/return`
   }, 
   async function(token, tokenSecret, profile, done){
     const existingUser = await User.findOne({twitterId: profile.id});

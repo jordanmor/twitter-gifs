@@ -1,3 +1,4 @@
 {
-  "root_url": "/"
+  "root_url": "/",
+  "callback_root_url": "https://twittergifs.herokuapp.com/"
 }
