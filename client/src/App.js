@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Nav from './components/nav';
 import Favorites from './components/favorites';
-import Users from './components/users';
+import CurrentUser from './components/currentUser';
 import Giphys from './components/giphys';
 import RandomWords from './components/randomWords';
 import TwitterTrends from './components/twitterTrends';
@@ -11,7 +11,7 @@ class App extends Component {
 
   state = { 
     favorites: [],
-    users: [],
+    user: null,
     randomWords: [],
     giphys: [],
     trends: []
@@ -19,8 +19,7 @@ class App extends Component {
 
   // Fetch passwords after first mount
   componentDidMount() {
-    this.getFavorites();
-    this.getUsers();
+    this.getUser();
     this.getRandomWords();
     this.getGiphys();
     this.getTwitterTrends();
@@ -59,19 +58,24 @@ class App extends Component {
   getFavorites = () => {
     // Get favorites from api and store in state
     fetch('/api/favorites')
-      .then(res => res.json())
-      .then(favorites => this.setState({ favorites }));
+    .then(res => res.json())
+    .then(favorites => this.setState({ favorites }));
   }
 
-  getUsers = () => {
-    // Get users from api and store in state
-    fetch('/api/users')
-      .then(res => res.json())
-      .then(users => this.setState({ users }));
+  getUser = async() => {
+    let user;
+    // Get user from api and store in state
+    const response = await fetch('/api/auth/current_user');
+
+    if (response.status === 200 ) {
+      user = await response.json();
+      this.setState({ user });
+      this.getFavorites();
+    }
   }
 
   render() {
-    const { favorites, users, randomWords, giphys, trends } = this.state;
+    const { favorites, randomWords, giphys, trends, user } = this.state;
 
     return (
       <div className="App">
@@ -79,7 +83,7 @@ class App extends Component {
           <h1>Host: {process.env.REACT_APP_HOST}</h1>
           <div className="d-flex align-items-center">
             <i className="material-icons">person_outline</i>
-            <h3 className="my-0 ml-2">Name</h3>
+            <h3 className="my-0 ml-2">{user ? user.name : 'Name'}</h3>
           </div>
           <Nav />
           <Switch>
@@ -92,10 +96,10 @@ class App extends Component {
                 />}
             />
             <Route 
-              path="/users"
+              path="/user"
               render={() => 
-                <Users 
-                  users={users}
+                <CurrentUser 
+                  user={user}
                 />}
             />
             <Route 

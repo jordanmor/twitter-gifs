@@ -4,7 +4,12 @@ var passport = require('passport');
 
 //GET api/auth/current_user
 router.get('/current_user', function(req, res){
-  res.send(req.user);
+  // User will only be attached to request if passport authenticates login
+  if (req.user) {
+    res.status(200).send(req.user);
+  } else {
+    res.status(401).end();
+  }
 });
 
 //GET api/auth/login/twitter
