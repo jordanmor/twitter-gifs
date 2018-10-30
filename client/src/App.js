@@ -4,6 +4,7 @@ import Nav from './components/nav';
 import Gallery from './components/gallery';
 import { getTrends, cleanName } from './services/trendsService';
 import { getGifs } from './services/giphyService';
+import { getRandomWords } from './services/wordnikService';
 
 class App extends Component {
 
@@ -19,19 +20,35 @@ class App extends Component {
   // Fetch passwords after first mount
   componentDidMount() {
     this.getUser();
-    this.getRandomWordsWithGif();
+    // this.getRandomWordWithGif();
     this.getTrendsWithGif();
+    this.persistTrendWithGifsPage();
   }
 
-  getRandomWordsWithGif = () => {
-    const wordnikApiKey = process.env.REACT_APP_WORDNIK_APIKEY;
-    // Get random words from Wordnik API
-    fetch(`https://api.wordnik.com/v4/words.json/randomWords?hasDictionaryDef=true&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=20&api_key=${wordnikApiKey}`)
-    .then(res => res.json())
-    .then(data => {
-      const randomWordsWithGif = data.map(item => ({ id: item.id, word: item.word }));
-      this.setState({ randomWordsWithGif });
-    })
+  persistTrendWithGifsPage = () => {
+    const trend = localStorage.getItem('trend');
+    if(trend) {
+      const trendHashReplaced = trend.replace('#', 'hashtag_');
+      if(this.props.location.pathname === `/${trendHashReplaced}`) {
+        this.getTrendWithGifs(trend);
+      }
+    }
+  }
+
+  getRandomWordsWithGif = async () => {
+    const wordsData = await getRandomWords(1);
+    const data = wordsData.map( async wordData => {
+      const word = wordData.word;
+      const gif = await getGifs(word, 1);
+      if (gif) {
+        return {id: wordData.id, word, gif: gif[0]};
+      } else {
+        return '';
+      }
+    });
+    const randomWordsWithGif = await Promise.all(data);
+    console.log(randomWordsWithGif);
+    this.setState({ randomWordsWithGif });
   }
 
   getTrendsWithGif = async () => {
@@ -66,6 +83,7 @@ class App extends Component {
     this.getTrendWithGifs(trend);
     const trendHashReplaced = trend.replace('#', 'hashtag_')
     const path = `/${trendHashReplaced}`;
+    localStorage.setItem('trend', trend);
     this.props.history.push(path);
   }
 
