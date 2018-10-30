@@ -7,8 +7,8 @@ router.get('/trends', function(req, res) {
   // Gets the lastest twitter trends in the United States
   twitterClient.get('trends/place', {id: woeid})
     .then( tweet => {
-      const trends = tweet[0].trends.slice(0, 20).map((trend, index) => ({id: index, name: trend.name}));
-      res.json(trends);
+      const trends = tweet[0].trends.map((trend, index) => ({id: index, name: trend.name}));
+      res.send(trends);
     })
     .catch( error => {
       throw error;
