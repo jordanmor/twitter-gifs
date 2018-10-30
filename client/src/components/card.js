@@ -1,6 +1,9 @@
 import React from 'react';
 
-const Card = ({ trend, gif }) => {
+const Card = props => {
+
+  const {trend, gif } = props;
+
   return ( 
     <div className="card mb-4 shadow-sm">
       <div className="card-header d-flex align-items-center justify-content-between">
@@ -9,7 +12,13 @@ const Card = ({ trend, gif }) => {
       </div>
       <img className="card-img-top" src={gif.image} alt={gif.title} />
       <div className="card-body text-center">
-        <button type="button" className="btn btn-outline-secondary">{trend}</button>
+        {
+          props.onPickTrend 
+            ?
+              <button onClick={() => props.onPickTrend(trend)} type="button" className="btn btn-outline-secondary">{trend}</button>
+            :
+              <p className="">{trend}</p>  
+        }
       </div>
     </div>
    );

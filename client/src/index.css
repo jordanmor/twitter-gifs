@@ -135,6 +135,7 @@ i + i {
 
 .card {
   border-color: var(--calm-border-light);
+  color: var(--calm);
 }
 
 .card-img-top {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { withRouter, Switch, Route } from 'react-router-dom';
 import Nav from './components/nav';
 import Gallery from './components/gallery';
 import { getTrends, cleanName } from './services/trendsService';
@@ -35,7 +35,7 @@ class App extends Component {
   }
 
   getTrendsWithGif = async () => {
-    const trends = await getTrends(8);
+    const trends = await getTrends(12);
     const data = trends.map(async trend => {
       const trendName = cleanName(trend.name);
       const gif = await getGifs(trendName, 1);
@@ -47,6 +47,26 @@ class App extends Component {
     });
     const trendsWithGif = await Promise.all(data);
     this.setState({ trendsWithGif });
+  }
+
+  getTrendWithGifs = async trend => {
+    const trendName = cleanName(trend);
+    const gifs = await getGifs(trendName, 12);
+    const trendWithGifs = gifs.map(gif => {
+      if (gif) {
+        return {id: gif.id, trend, gif};
+      } else {
+        return '';
+      }
+    });
+    this.setState({ trendWithGifs });
+  }
+
+  handlePickTrend = trend => {
+    this.getTrendWithGifs(trend);
+    const trendHashReplaced = trend.replace('#', 'hashtag_')
+    const path = `/${trendHashReplaced}`;
+    this.props.history.push(path);
   }
 
   getFavorites = () => {
@@ -69,7 +89,7 @@ class App extends Component {
   }
 
   render() {
-    const { trendsWithGif } = this.state;
+    const { trendsWithGif, trendWithGifs } = this.state;
 
     return (
       <React.Fragment>
@@ -79,10 +99,19 @@ class App extends Component {
         <main role="main">
           <Switch>
             <Route 
-              path="/"
+              path="/:trend"
+              render={() => 
+                <Gallery
+                  data={trendWithGifs}
+                />
+              }>
+            </Route>
+            <Route 
+              exact path="/"
               render={() => 
                 <Gallery
                   data={trendsWithGif}
+                  onPickTrend={this.handlePickTrend}
                 />
               }>
             </Route>
@@ -93,4 +122,9 @@ class App extends Component {
   }
 }
 
-export default App;
+/* withRouter will pass updated match, location, and history props 
+to the wrapped component whenever it renders. It gives access to the 
+history object’s properties and the closest <Route>'s match. This is necessary
+because this component is not nested inside a <Route />, which can pass the 
+match, location, and history props to it's nested child component */
+export default withRouter(App);
