@@ -6,9 +6,16 @@ const FavoriteSchema = new Schema({
     type: Schema.Types.ObjectId, 
     ref: 'User'  
   },
-  name: {
+  topic: {
     type: String,
     required: [true, 'A favorite is required']
+  },
+  gif: {
+    image: {
+      type: String,
+      required: true
+    },
+    title: String
   }
 });
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Redirect, Switch, Route } from 'react-router-dom';
+import axios from 'axios';
 import Nav from './components/nav';
 import Gallery from './components/gallery';
 import { getTrends, cleanName } from './services/trendsService';
@@ -22,6 +23,7 @@ class App extends Component {
     this.getRandomWordsWithGif();
     this.persistTopicWithGifsPage();
     this.getUser();
+    this.getFavorites();
   }
 
   getTrendsWithGif = async () => {
@@ -85,11 +87,13 @@ class App extends Component {
     this.props.history.push(path);
   }
 
-  getFavorites = () => {
+  getFavorites = async () => {
     // Get favorites from api and store in state
-    fetch('/api/favorites')
-    .then(res => res.json())
-    .then(favorites => this.setState({ favorites }));
+    const { data } = await axios.get('/api/favorites');
+    const favorites = data.map(favorite =>
+      ({id: favorite._id, topic: favorite.topic, gif: favorite.gif})
+    );
+    this.setState({ favorites });
   }
 
   getUser = async() => {
@@ -105,12 +109,12 @@ class App extends Component {
   }
 
   render() {
-    const { trendsWithGif, topicWithGifs, randomWordsWithGif } = this.state;
+    const { trendsWithGif, topicWithGifs, randomWordsWithGif, favorites } = this.state;
 
     return (
       <React.Fragment>
         <header>
-          <Nav />
+          <Nav count={favorites.length}/>
         </header>
         <main role="main">
           <Switch>
@@ -147,6 +151,14 @@ class App extends Component {
               render={() => 
                 <Gallery
                   data={topicWithGifs}
+                />
+              }>
+            </Route>
+            <Route 
+              path="/favorites"
+              render={() => 
+                <Gallery
+                  data={favorites}
                 />
               }>
             </Route>

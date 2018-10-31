@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Nav = () => {
+const Nav = ({ count }) => {
 
   const rootUrl = process.env.REACT_APP_ROOT_URL;
 
@@ -37,10 +37,10 @@ const Nav = () => {
               <NavLink exact to="/randomTopics" className="btn btn-outline-secondary">Random Topics</NavLink>
             </li>
             <li className="nav-item">
-              <button type="button" className="favorites btn btn-outline-secondary justify-content-between">
+              <NavLink exact to="/favorites" className="favorites btn btn-outline-secondary justify-content-between">
                 My Favorite Topics 
-                <span className="badge badge-secondary badge-pill">2</span>
-              </button>
+                <span className="badge badge-secondary badge-pill">{count}</span>
+              </NavLink>
             </li>
           </ul>
         </div>

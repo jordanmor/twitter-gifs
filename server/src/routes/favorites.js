@@ -6,7 +6,7 @@ const requireLogin = require('../middleware/requireLogin');
 router.get('/', requireLogin, async (req, res, next) => {
   const favorites = await Favorite.find()
   .where('user').equals(req.user._id);
-  res.json(favorites);
+  res.send(favorites);
 });
 
 // POST / - create a new favorite
