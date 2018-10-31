@@ -1,8 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Login from './login';
+import SearchForm from './searchForm';
 
-const Nav = ({ count, user }) => {
+const Nav = ({ count, user, onSearch }) => {
 
   return ( 
     <React.Fragment>
@@ -12,9 +13,7 @@ const Nav = ({ count, user }) => {
 
             <a className="navbar-brand" href="/">Twitter GIFs</a>
 
-            <form className="form-inline my-lg-0 search">
-              <input className="form-control mr-sm-2" type="search" placeholder="Search topic" aria-label="Search" />
-            </form>
+            <SearchForm onSearch={onSearch} />
             
             <Login user={user} />
           </nav>

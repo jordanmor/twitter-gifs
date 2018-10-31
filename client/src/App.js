@@ -17,7 +17,7 @@ class App extends Component {
     randomWordsWithGif: [],
     topicWithGifs: [],
     limit: {
-      trends: 1,
+      trends: 4,
       random: 1,
       topicWithGifs: 4
     }
@@ -80,10 +80,11 @@ class App extends Component {
   persistTopicWithGifsPage = () => {
     const topic = localStorage.getItem('topic');
     if(topic) {
-      const topicHashReplaced = topic.replace('#', 'hashtag_');
-      if(this.props.location.pathname === `/${topicHashReplaced}`) {
-        this.getTopicWithGifs(topic);
-      }
+      // const topicHashReplaced = topic.replace('#', 'hashtag_');
+      // if(this.props.location.pathname.indexOf(topicHashReplaced) !== -1) {
+
+      // }
+      this.getTopicWithGifs(topic);
     }
   }
 
@@ -125,6 +126,7 @@ class App extends Component {
       <React.Fragment>
         <header>
           <Nav 
+            onSearch={this.handleTopicClick}
             count={favorites.length}
             user={user}
           />
@@ -161,6 +163,14 @@ class App extends Component {
             </Route>
             <Route 
               path="/trends/:topic"
+              render={() => 
+                <Gallery
+                  data={topicWithGifs}
+                />
+              }>
+            </Route>
+            <Route 
+              path="/search/:id"
               render={() => 
                 <Gallery
                   data={topicWithGifs}
