@@ -1,9 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import Login from './login';
 
-const Nav = ({ count }) => {
-
-  const rootUrl = process.env.REACT_APP_ROOT_URL;
+const Nav = ({ count, user }) => {
 
   return ( 
     <React.Fragment>
@@ -17,11 +16,7 @@ const Nav = ({ count }) => {
               <input className="form-control mr-sm-2" type="search" placeholder="Search topic" aria-label="Search" />
             </form>
             
-            <div>
-              <i className="material-icons">person_outline</i>
-              <a href={`${rootUrl}api/auth/login/twitter`} className="btn btn-primary">Login to Twitter</a>
-            </div>
-
+            <Login user={user} />
           </nav>
         </div>
       </div>

@@ -44,6 +44,18 @@ i + i {
   border-color: var(--calm-darker);
 }
 
+.btn-outline-primary {
+  color: var(--off-white);
+  border-color: var(--off-white);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:not(:disabled):not(.disabled).active {
+  color: var(--calm);
+  background-color: var(--off-white);
+  border-color: var(--off-white);
+}
+
 .btn-outline-secondary {
   color: var(--calm);
   border-color: var(--calm);
@@ -91,6 +103,18 @@ i + i {
 .login i,
 .login > a {
   color: var(--off-white);
+}
+
+.fa-user {
+  color: var(--off-white);
+  font-size: 1.8rem;
+  cursor: default;
+}
+
+.user-photo {
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
 }
 
 /* --- Search Form --- */
@@ -154,6 +178,19 @@ i + i {
 
 .fa-twitter:hover {
   color: var(--calm-darker);
+}
+
+.profile-page,
+.favorites-page {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--calm-darker); 
+}
+
+.profile-photo {
+  width: 250px;
+  height: 250px;
+  border-radius: 100%;
 }
 
 /*============-============-============-============

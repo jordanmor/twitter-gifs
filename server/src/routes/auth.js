@@ -9,8 +9,6 @@ router.get('/current_user', function(req, res){
   // User will only be attached to request if passport authenticates login
   if (req.user) {
     res.status(200).send(req.user);
-  } else {
-    res.status(401).end();
   }
 });
 
@@ -22,7 +20,7 @@ router.get('/login/twitter',
 router.get('/twitter/return', 
   passport.authenticate('twitter', { failureRedirect: '/' }),
   function(req, res) {
-    res.redirect(rootUrl);
+    res.redirect(`${rootUrl}profile`);
 });
 
 //GET api/auth/logout

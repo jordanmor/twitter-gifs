@@ -3,6 +3,7 @@ import { withRouter, Redirect, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 import Nav from './components/nav';
 import Gallery from './components/gallery';
+import Profile from './components/profile';
 import { getTrends, cleanName } from './services/trendsService';
 import { getGifs } from './services/giphyService';
 import { getRandomWords } from './services/wordnikService';
@@ -14,7 +15,12 @@ class App extends Component {
     user: null,
     trendsWithGif: [],
     randomWordsWithGif: [],
-    topicWithGifs: []
+    topicWithGifs: [],
+    limit: {
+      trends: 1,
+      random: 1,
+      topicWithGifs: 4
+    }
   }
 
   // Fetch passwords after first mount
@@ -23,11 +29,11 @@ class App extends Component {
     this.getRandomWordsWithGif();
     this.persistTopicWithGifsPage();
     this.getUser();
-    this.getFavorites();
   }
 
   getTrendsWithGif = async () => {
-    const trends = await getTrends(4);
+    const { limit } = this.state;
+    const trends = await getTrends(limit.trends);
     const data = trends.map(async trend => {
       const trendName = cleanName(trend.name);
       const gif = await getGifs(trendName, 1);
@@ -42,7 +48,8 @@ class App extends Component {
   }
 
   getRandomWordsWithGif = async () => {
-    const wordsData = await getRandomWords(1);
+    const { limit } = this.state;
+    const wordsData = await getRandomWords(limit.random);
     const data = wordsData.map( async wordData => {
       const word = wordData.word;
       const gif = await getGifs(word, 1);
@@ -57,8 +64,9 @@ class App extends Component {
   }
 
   getTopicWithGifs = async topic => {
+    const { limit } = this.state;
     const topicName = cleanName(topic);
-    const gifs = await getGifs(topicName, 12);
+    const gifs = await getGifs(topicName, limit.topicWithGifs);
     const topicWithGifs = gifs.map(gif => {
       if (gif) {
         return {id: gif.id, topic, gif};
@@ -99,22 +107,27 @@ class App extends Component {
   getUser = async() => {
     let user;
     // Get user from api and store in state
-    const response = await fetch('/api/auth/current_user');
+    const response = await axios.get('/api/auth/current_user');
 
     if (response.status === 200 ) {
-      user = await response.json();
+      user = response.data;
       this.setState({ user });
       this.getFavorites();
+    } else {
+      this.setState({ user: null });
     }
   }
 
   render() {
-    const { trendsWithGif, topicWithGifs, randomWordsWithGif, favorites } = this.state;
+    const { trendsWithGif, topicWithGifs, randomWordsWithGif, favorites, user } = this.state;
 
     return (
       <React.Fragment>
         <header>
-          <Nav count={favorites.length}/>
+          <Nav 
+            count={favorites.length}
+            user={user}
+          />
         </header>
         <main role="main">
           <Switch>
@@ -159,6 +172,16 @@ class App extends Component {
               render={() => 
                 <Gallery
                   data={favorites}
+                  user={user}
+                  favorites={true}
+                />
+              }>
+            </Route>
+            <Route 
+              exact path="/profile"
+              render={() => 
+                <Profile
+                  user={user}
                 />
               }>
             </Route>

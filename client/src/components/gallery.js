@@ -1,8 +1,10 @@
 import React from 'react';
 import Card from './card';
 
-const Gallery = ({ data, onTopicClick, location }) => {
-  // console.log(data);
+const Gallery = ({ data, onTopicClick, location, favorites, user }) => {
+
+  if (favorites && !user) return <div className="container favorites-page">Please log in to your Twitter account to see your favorites</div>
+
   return ( 
     <div className="gallery bg-light">
       <div className="container">
