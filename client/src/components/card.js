@@ -2,7 +2,7 @@ import React from 'react';
 
 const Card = props => {
 
-  const {trend, gif } = props;
+  const {topic, gif, location } = props;
 
   return ( 
     <div className="card mb-4 shadow-sm">
@@ -13,11 +13,11 @@ const Card = props => {
       <img className="card-img-top" src={gif.image} alt={gif.title} />
       <div className="card-body text-center">
         {
-          props.onPickTrend 
+          props.onTopicClick 
             ?
-              <button onClick={() => props.onPickTrend(trend)} type="button" className="btn btn-outline-secondary">{trend}</button>
+              <button onClick={() => props.onTopicClick(topic, location.pathname)} type="button" className="btn btn-outline-secondary">{topic}</button>
             :
-              <p className="">{trend}</p>  
+              <p className="">{topic}</p>
         }
       </div>
     </div>

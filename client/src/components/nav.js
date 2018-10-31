@@ -31,10 +31,10 @@ const Nav = () => {
           <ul className="nav d-flex">
             <li className="lead text-muted">The latest Twitter trends matched with GIFs</li>
             <li className="nav-item">
-              <NavLink to="/" className="btn btn-outline-secondary">Today's Trending Topics</NavLink>
+              <NavLink exact to="/trends" className="btn btn-outline-secondary">Today's Trending Topics</NavLink>
             </li>
             <li className="nav-item">
-              <button type="button" className="btn btn-outline-secondary">Random Topics</button>
+              <NavLink exact to="/randomTopics" className="btn btn-outline-secondary">Random Topics</NavLink>
             </li>
             <li className="nav-item">
               <button type="button" className="favorites btn btn-outline-secondary justify-content-between">

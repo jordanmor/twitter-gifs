@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter, Switch, Route } from 'react-router-dom';
+import { withRouter, Redirect, Switch, Route } from 'react-router-dom';
 import Nav from './components/nav';
 import Gallery from './components/gallery';
 import { getTrends, cleanName } from './services/trendsService';
@@ -12,52 +12,25 @@ class App extends Component {
     favorites: [],
     user: null,
     trendsWithGif: [],
-    trendWithGifs: [],
     randomWordsWithGif: [],
-    randomWordWithGifs: []
+    topicWithGifs: []
   }
 
   // Fetch passwords after first mount
   componentDidMount() {
-    this.getUser();
-    // this.getRandomWordWithGif();
     this.getTrendsWithGif();
-    this.persistTrendWithGifsPage();
-  }
-
-  persistTrendWithGifsPage = () => {
-    const trend = localStorage.getItem('trend');
-    if(trend) {
-      const trendHashReplaced = trend.replace('#', 'hashtag_');
-      if(this.props.location.pathname === `/${trendHashReplaced}`) {
-        this.getTrendWithGifs(trend);
-      }
-    }
-  }
-
-  getRandomWordsWithGif = async () => {
-    const wordsData = await getRandomWords(1);
-    const data = wordsData.map( async wordData => {
-      const word = wordData.word;
-      const gif = await getGifs(word, 1);
-      if (gif) {
-        return {id: wordData.id, word, gif: gif[0]};
-      } else {
-        return '';
-      }
-    });
-    const randomWordsWithGif = await Promise.all(data);
-    console.log(randomWordsWithGif);
-    this.setState({ randomWordsWithGif });
+    this.getRandomWordsWithGif();
+    this.persistTopicWithGifsPage();
+    this.getUser();
   }
 
   getTrendsWithGif = async () => {
-    const trends = await getTrends(12);
+    const trends = await getTrends(4);
     const data = trends.map(async trend => {
       const trendName = cleanName(trend.name);
       const gif = await getGifs(trendName, 1);
       if (gif) {
-        return {id: trend.id, trend: trend.name, gif: gif[0]};
+        return {id: trend.id, topic: trend.name, gif: gif[0]};
       } else {
         return '';
       }
@@ -66,24 +39,49 @@ class App extends Component {
     this.setState({ trendsWithGif });
   }
 
-  getTrendWithGifs = async trend => {
-    const trendName = cleanName(trend);
-    const gifs = await getGifs(trendName, 12);
-    const trendWithGifs = gifs.map(gif => {
+  getRandomWordsWithGif = async () => {
+    const wordsData = await getRandomWords(1);
+    const data = wordsData.map( async wordData => {
+      const word = wordData.word;
+      const gif = await getGifs(word, 1);
       if (gif) {
-        return {id: gif.id, trend, gif};
+        return {id: wordData.id, topic: word, gif: gif[0]};
       } else {
         return '';
       }
     });
-    this.setState({ trendWithGifs });
+    const randomWordsWithGif = await Promise.all(data);
+    this.setState({ randomWordsWithGif });
   }
 
-  handlePickTrend = trend => {
-    this.getTrendWithGifs(trend);
-    const trendHashReplaced = trend.replace('#', 'hashtag_')
-    const path = `/${trendHashReplaced}`;
-    localStorage.setItem('trend', trend);
+  getTopicWithGifs = async topic => {
+    const topicName = cleanName(topic);
+    const gifs = await getGifs(topicName, 12);
+    const topicWithGifs = gifs.map(gif => {
+      if (gif) {
+        return {id: gif.id, topic, gif};
+      } else {
+        return '';
+      }
+    });
+    this.setState({ topicWithGifs });
+  }
+
+  persistTopicWithGifsPage = () => {
+    const topic = localStorage.getItem('topic');
+    if(topic) {
+      const topicHashReplaced = topic.replace('#', 'hashtag_');
+      if(this.props.location.pathname === `/${topicHashReplaced}`) {
+        this.getTopicWithGifs(topic);
+      }
+    }
+  }
+
+  handleTopicClick = (topic, pathname) => {
+    this.getTopicWithGifs(topic);
+    const topicHashReplaced = topic.replace('#', 'hashtag_')
+    const path = `${pathname}/${topicHashReplaced}`;
+    localStorage.setItem('topic', topic);
     this.props.history.push(path);
   }
 
@@ -107,7 +105,7 @@ class App extends Component {
   }
 
   render() {
-    const { trendsWithGif, trendWithGifs } = this.state;
+    const { trendsWithGif, topicWithGifs, randomWordsWithGif } = this.state;
 
     return (
       <React.Fragment>
@@ -117,21 +115,44 @@ class App extends Component {
         <main role="main">
           <Switch>
             <Route 
-              path="/:trend"
+              exact path="/randomTopics"
+              render={props => 
+                <Gallery
+                  {...props}
+                  data={randomWordsWithGif}
+                  onTopicClick={this.handleTopicClick}
+                />
+              }>
+            </Route>
+            <Route 
+              path="/randomTopics/:topic"
               render={() => 
                 <Gallery
-                  data={trendWithGifs}
+                  data={topicWithGifs}
+                />
+              }>
+            </Route>
+            <Route 
+              exact path="/trends"
+              render={props => 
+                <Gallery
+                  {...props}
+                  data={trendsWithGif}
+                  onTopicClick={this.handleTopicClick}
+                />
+              }>
+            </Route>
+            <Route 
+              path="/trends/:topic"
+              render={() => 
+                <Gallery
+                  data={topicWithGifs}
                 />
               }>
             </Route>
             <Route 
               exact path="/"
-              render={() => 
-                <Gallery
-                  data={trendsWithGif}
-                  onPickTrend={this.handlePickTrend}
-                />
-              }>
+              render={() => <Redirect to="/trends" /> }>
             </Route>
           </Switch>
         </main>

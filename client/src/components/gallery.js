@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './card';
 
-const Gallery = ({ data, onPickTrend }) => {
+const Gallery = ({ data, onTopicClick, location }) => {
   // console.log(data);
   return ( 
     <div className="gallery bg-light">
@@ -12,9 +12,10 @@ const Gallery = ({ data, onPickTrend }) => {
               return (
                 <Card 
                   key={item.id} 
-                  trend={item.trend}
+                  topic={item.topic}
                   gif={item.gif}
-                  onPickTrend={onPickTrend}
+                  onTopicClick={onTopicClick}
+                  location={location}
                 />
               );
             } else {
