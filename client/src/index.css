@@ -210,8 +210,6 @@ i + i {
   background-color: var(--off-white);
   position: relative;
   padding: .75rem 0;
-  /* border-top-left-radius: 8px;
-  border-top-right-radius: 8px; */
 }
 
 .tweet-header h3 {
@@ -242,14 +240,36 @@ i + i {
   border-radius: 4px;
 }
 
-.tweet-form textarea {
+.tweet-form .form-control:focus {
+  box-shadow: none;
+}
+
+.tweet-form .textArea1,
+.tweet-form .textArea2 {
   font-size: .9rem;
-  outline: none;
+  background-color: var(--off-white);
   border: none;
-  border-bottom: 1px solid #DCE3E8;
+  box-shadow: none;
   resize: none;
+}
+
+.tweet-form .textArea2 {
+  border-bottom: 1px solid #DCE3E8;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+}
+
+.textarea-main {
+  flex-basis: 90%;
+  color: #495057;
+  padding: 
+}
+
+.textarea-side {
+  flex-basis: 10%;
+  color: #495057;
+  background-color: var(--off-white);
+  padding: .375rem .75rem
 }
 
 .tweet-form .tweet-gif {
@@ -270,6 +290,11 @@ i + i {
 
 .tweet-btn:hover {
   background-color: var(--calm);
+}
+
+.tweet-note {
+  width: 600px;
+  color: #495057;
 }
 
 /*============-============-============-============

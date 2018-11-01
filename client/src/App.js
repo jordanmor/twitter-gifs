@@ -97,15 +97,16 @@ class App extends Component {
   }
 
 
-  getTweet = () => {
-
+  handlePostTweet = async (tweet) => {
+    await axios.post('/api/twitter/tweet', tweet);
   }
 
   handlePrepareTweet = (topic, gif) => {
-    localStorage.setItem('topic', topic);
-    localStorage.setItem('gif', gif);
-    this.getTweet();
-    this.props.history.push('/tweet');
+    if(this.state.user) {
+      localStorage.setItem('topic', topic);
+      localStorage.setItem('gif', gif);
+      this.props.history.push('/tweet');
+    }
   }
 
   getFavorites = async () => {
@@ -199,6 +200,7 @@ class App extends Component {
               render={() => 
                 <Tweet
                   userPhoto={user.photo}
+                  onPostTweet={this.handlePostTweet}
                 />
               }>
             </Route>

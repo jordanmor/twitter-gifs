@@ -13,7 +13,7 @@ class Tweet extends Component {
   }
 
   onTextInputChange = e => {
-    const textAreaText = e.target.value.toLowerCase();
+    const textAreaText = e.target.value;
     this.setState({ textAreaText });
   }
 
@@ -21,18 +21,22 @@ class Tweet extends Component {
     const topic = localStorage.getItem('topic');
     const gif = localStorage.getItem('gif');
     this.setState({ 
-      textAreaText: `${topic}`,
+      textAreaText: topic,
       gif
     });
   }
 
   render() { 
 
-    const { userPhoto } = this.props;
+    const { userPhoto, onPostTweet } = this.props;
+    const { textAreaText, gif } = this.state;
+
+    const textAreaMaxLength = 280 - gif.length;
+    const totalChars = 280 - gif.length - textAreaText.length;
 
     return ( 
       <div className="container mt-4">
-        <div className="tweet-container m-auto">
+        <div className="tweet-container mx-auto mb-5">
 
           <div className="tweet-header mb-3">
             <h3>Compose new Tweet</h3>
@@ -41,25 +45,49 @@ class Tweet extends Component {
 
           <div className="tweet-body d-flex justify-content-start align-items-start mb-3">
             <img className="tweet-photo" src={userPhoto} alt=""/>
-            <form className="tweet-form d-flex flex-column" action="post" onSubmit={() => this.props.onTweet()}>
+            <form className="tweet-form d-flex flex-column">
+
               <div className="form-group">
-                <textarea 
-                  className="form-control" 
-                  id="tweetTextArea" 
-                  maxLength="280" 
-                  rows="5"
-                  value={this.state.textAreaText}
-                  onChange={this.onTextInputChange}
-                >
-                </textarea>
+                <div className="textarea-container d-flex">
+                  <div className="textarea-main">
+                    <textarea 
+                      className="form-control textArea1" 
+                      id="tweetTextArea" 
+                      maxLength={textAreaMaxLength} 
+                      rows="5"
+                      name="tweet-text"
+                      value={textAreaText}
+                      onChange={this.onTextInputChange}
+                      autoFocus
+                    >
+                    </textarea>
+                    <textarea 
+                      className="form-control textArea2" 
+                      id="gifLinkTextArea"
+                      rows="1"
+                      name="tweet-text"
+                      value={gif}
+                      readOnly
+                    >
+                    </textarea>
+                  </div>
+                  <div className="textarea-side d-flex flex-column justify-content-between align-items-center">
+                    <span role="img" aria-label="Happy Face">😊</span>
+                    <span>{totalChars}</span>
+                  </div>
+                </div>
+
                 <div className="tweet-gif">
-                  <img src={this.state.gif} alt=""/>
+                  <img src={gif} alt=""/>
                 </div>
               </div>
-              <button type="submit" className="tweet-btn btn btn-primary align-self-end">Tweet</button>
+              <button onClick={() => onPostTweet(textAreaText, gif)} type="button" className="tweet-btn btn btn-primary align-self-end">Tweet</button>
             </form>
           </div>
 
+        </div>
+        <div className="tweet-note mx-auto">
+          <p>Note: Tweet character limit is effected by the number of characters in the GIF link.</p>
         </div>
 
       </div> 
