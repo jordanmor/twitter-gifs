@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './card';
 
-const Gallery = ({ data, onTopicClick, location, favorites, user }) => {
+const Gallery = ({ data, onTopicClick, location, favorites, user, onPrepareTweet }) => {
 
   if (favorites && !user) return <div className="container favorites-page">Please log in to your Twitter account to see your favorites</div>
 
@@ -18,6 +18,7 @@ const Gallery = ({ data, onTopicClick, location, favorites, user }) => {
                   gif={item.gif}
                   onTopicClick={onTopicClick}
                   location={location}
+                  onPrepareTweet={onPrepareTweet}
                 />
               );
             } else {

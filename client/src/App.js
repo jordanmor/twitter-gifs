@@ -4,6 +4,7 @@ import axios from 'axios';
 import Nav from './components/nav';
 import Gallery from './components/gallery';
 import Profile from './components/profile';
+import Tweet from './components/tweet';
 import { getTrends, cleanName } from './services/trendsService';
 import { getGifs } from './services/giphyService';
 import { getRandomWords } from './services/wordnikService';
@@ -12,7 +13,7 @@ class App extends Component {
 
   state = { 
     favorites: [],
-    user: null,
+    user: '',
     trendsWithGif: [],
     randomWordsWithGif: [],
     topicWithGifs: [],
@@ -23,7 +24,6 @@ class App extends Component {
     }
   }
 
-  // Fetch passwords after first mount
   componentDidMount() {
     this.getTrendsWithGif();
     this.getRandomWordsWithGif();
@@ -96,6 +96,18 @@ class App extends Component {
     this.props.history.push(path);
   }
 
+
+  getTweet = () => {
+
+  }
+
+  handlePrepareTweet = (topic, gif) => {
+    localStorage.setItem('topic', topic);
+    localStorage.setItem('gif', gif);
+    this.getTweet();
+    this.props.history.push('/tweet');
+  }
+
   getFavorites = async () => {
     // Get favorites from api and store in state
     const { data } = await axios.get('/api/favorites');
@@ -115,7 +127,7 @@ class App extends Component {
       this.setState({ user });
       this.getFavorites();
     } else {
-      this.setState({ user: null });
+      this.setState({ user: '' });
     }
   }
 
@@ -140,6 +152,7 @@ class App extends Component {
                   {...props}
                   data={randomWordsWithGif}
                   onTopicClick={this.handleTopicClick}
+                  onPrepareTweet={this.handlePrepareTweet}
                 />
               }>
             </Route>
@@ -148,6 +161,7 @@ class App extends Component {
               render={() => 
                 <Gallery
                   data={topicWithGifs}
+                  onPrepareTweet={this.handlePrepareTweet}
                 />
               }>
             </Route>
@@ -158,6 +172,7 @@ class App extends Component {
                   {...props}
                   data={trendsWithGif}
                   onTopicClick={this.handleTopicClick}
+                  onPrepareTweet={this.handlePrepareTweet}
                 />
               }>
             </Route>
@@ -166,6 +181,7 @@ class App extends Component {
               render={() => 
                 <Gallery
                   data={topicWithGifs}
+                  onPrepareTweet={this.handlePrepareTweet}
                 />
               }>
             </Route>
@@ -174,6 +190,15 @@ class App extends Component {
               render={() => 
                 <Gallery
                   data={topicWithGifs}
+                  onPrepareTweet={this.handlePrepareTweet}
+                />
+              }>
+            </Route>
+            <Route 
+              path="/tweet"
+              render={() => 
+                <Tweet
+                  userPhoto={user.photo}
                 />
               }>
             </Route>
@@ -184,6 +209,7 @@ class App extends Component {
                   data={favorites}
                   user={user}
                   favorites={true}
+                  onPrepareTweet={this.handlePrepareTweet}
                 />
               }>
             </Route>
