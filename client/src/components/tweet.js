@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Tweet extends Component {
 
@@ -35,7 +36,7 @@ class Tweet extends Component {
 
           <div className="tweet-header mb-3">
             <h3>Compose new Tweet</h3>
-            <span>x</span>
+            <Link to="/"><span>x</span></Link>
           </div>
 
           <div className="tweet-body d-flex justify-content-start align-items-start mb-3">
