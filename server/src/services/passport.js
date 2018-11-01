@@ -13,6 +13,7 @@ passport.use(new TwitterStrategy({
   callbackURL: `${callbackRootUrl}api/auth/twitter/return`
   }, 
   async function(token, tokenSecret, profile, done){
+    
     const existingUser = await User.findOne({twitterId: profile.id});
     if (existingUser) {
       done(null, existingUser);
@@ -20,6 +21,7 @@ passport.use(new TwitterStrategy({
       const user = await new User({
         twitterId: profile.id,
         name: profile.displayName,
+        username: profile.username,
         photo: profile.photos[0].value
       }).save();
   

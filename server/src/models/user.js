@@ -11,15 +11,16 @@ const UserSchema = new Schema({
     required: [true, 'Name required'],
     trim: true
   },
-  photo: {
+  username: {
     type: String,
     required: true,
     trim: true
   },
-  favorites: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Favorite'
-  }]
+  photo: {
+    type: String,
+    required: true,
+    trim: true
+  }
 });
 
 const User = mongoose.model('User', UserSchema);
