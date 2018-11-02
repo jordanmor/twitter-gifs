@@ -97,8 +97,8 @@ class App extends Component {
   }
 
 
-  handlePostTweet = async (tweet) => {
-    await axios.post('/api/twitter/tweet', tweet);
+  handlePostTweet = async (text, gif) => {
+    await axios.post('/api/twitter/tweet', {text, gif});
   }
 
   handlePrepareTweet = (topic, gif) => {

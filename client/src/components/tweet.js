@@ -18,12 +18,9 @@ class Tweet extends Component {
   }
 
   populateTextArea = () => {
-    const topic = localStorage.getItem('topic');
+    const textAreaText = localStorage.getItem('topic');
     const gif = localStorage.getItem('gif');
-    this.setState({ 
-      textAreaText: topic,
-      gif
-    });
+    this.setState({ textAreaText, gif });
   }
 
   render() { 
@@ -31,8 +28,9 @@ class Tweet extends Component {
     const { userPhoto, onPostTweet } = this.props;
     const { textAreaText, gif } = this.state;
 
-    const textAreaMaxLength = 280 - gif.length;
-    const totalChars = 280 - gif.length - textAreaText.length;
+    // Twitter limit = 280. Subract an extra char for space separating tweet text and gif url.
+    const textAreaMaxLength = 280 - gif.length - 1;
+    const totalChars = textAreaMaxLength - textAreaText.length;
 
     return ( 
       <div className="container mt-4">
