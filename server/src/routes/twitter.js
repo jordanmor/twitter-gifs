@@ -36,7 +36,7 @@ router.post('/tweet', async (req, res) => {
       console.log("Error posting tweet");
       res.status(400).send(error);
     } else {
-      res.status(201).end();
+      res.status(201).send('Tweet Posted!');
     }
   });
 

@@ -12,13 +12,10 @@ class SearchForm extends Component {
   }
 
   handleSubmit = e => {
-    console.log('Here!')
     const { searchText } = this.state; 
-    // const path = `/search/${searchText}`;
     
     e.preventDefault();
     this.props.onSearch(searchText, '/search');
-    // this.props.history.push(path);
     e.currentTarget.reset();
   }
 

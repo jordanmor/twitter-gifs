@@ -5,6 +5,7 @@ import Nav from './components/nav';
 import Gallery from './components/gallery';
 import Profile from './components/profile';
 import Tweet from './components/tweet';
+import Success from './components/success';
 import { getTrends, cleanName } from './services/trendsService';
 import { getGifs } from './services/giphyService';
 import { getRandomWords } from './services/wordnikService';
@@ -17,6 +18,7 @@ class App extends Component {
     trendsWithGif: [],
     randomWordsWithGif: [],
     topicWithGifs: [],
+    message: '',
     limit: {
       trends: 4,
       random: 1,
@@ -98,7 +100,10 @@ class App extends Component {
 
 
   handlePostTweet = async (text, gif) => {
-    await axios.post('/api/twitter/tweet', {text, gif});
+    this.setState({ message: "Sending tweet..." });
+    this.props.history.push('/tweet/success');
+    const { data: message } = await axios.post('/api/twitter/tweet', {text, gif})
+    this.setState({ message });
   }
 
   handlePrepareTweet = (topic, gif) => {
@@ -133,7 +138,7 @@ class App extends Component {
   }
 
   render() {
-    const { trendsWithGif, topicWithGifs, randomWordsWithGif, favorites, user } = this.state;
+    const { trendsWithGif, topicWithGifs, randomWordsWithGif, favorites, user, message } = this.state;
 
     return (
       <React.Fragment>
@@ -196,7 +201,15 @@ class App extends Component {
               }>
             </Route>
             <Route 
-              path="/tweet"
+              exact path="/tweet/success"
+              render={() => 
+                <Success
+                  message={message}
+                />
+              }>
+            </Route>
+            <Route 
+              exact path="/tweet"
               render={() => 
                 <Tweet
                   userPhoto={user.photo}
