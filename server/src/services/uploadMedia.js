@@ -5,9 +5,14 @@ const twitterClient = require('./twitter-client');
 
 async function uploadMedia(gif) {
 
-  const pathToGif = 'temp/foo.gif';
+  const downloadDir = './src/temp';
+  const filename = 'foo.gif';
+  // Data folder created if one does not exist. If it does exist, the program does nothing.
+  await fs.mkdir(downloadDir, err => err);
+  // Download gif to temp folder
+  await download(gif, downloadDir, {filename});
 
-  await download(gif, 'temp', {filename: 'foo.gif'});
+  const pathToGif = `${downloadDir}/${filename}`;
   const mediaData = fs.readFileSync(pathToGif);
   const mediaSize = fs.statSync(pathToGif).size;
   const mediaType   = 'image/gif';
@@ -16,7 +21,7 @@ async function uploadMedia(gif) {
     .then(appendUpload) // Send the data for the media
     .then(finalizeUpload) // Declare that you are done uploading chunks
 
-  await del(['temp/*.gif']);
+  await del([pathToGif]);
 
   // Step 1 of 3: Initialize a media upload
   function initUpload () {
