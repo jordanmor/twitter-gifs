@@ -92,12 +92,14 @@ class App extends Component {
     this.props.history.push(path);
   }
 
-
   handlePostTweet = async (text, gif) => {
     this.setState({ message: "Sending tweet..." });
     this.props.history.push('/tweet/success');
     const { data: message } = await axios.post('/api/twitter/tweet', {text, gif})
     this.setState({ message });
+    setTimeout(() => {
+      this.props.history.push('/');
+    }, 1000);
   }
 
   handlePrepareTweet = (topic, gif) => {

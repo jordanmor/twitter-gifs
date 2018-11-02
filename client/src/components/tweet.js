@@ -28,8 +28,7 @@ class Tweet extends Component {
     const { userPhoto, onPostTweet } = this.props;
     const { textAreaText, gif } = this.state;
 
-    // Twitter limit = 280. Subract an extra char for space separating tweet text and gif url.
-    const textAreaMaxLength = 280 - gif.length - 1;
+    const textAreaMaxLength = 280;
     const totalChars = textAreaMaxLength - textAreaText.length;
 
     return ( 
@@ -59,15 +58,6 @@ class Tweet extends Component {
                       autoFocus
                     >
                     </textarea>
-                    <textarea 
-                      className="form-control textArea2" 
-                      id="gifLinkTextArea"
-                      rows="1"
-                      name="tweet-text"
-                      value={gif}
-                      readOnly
-                    >
-                    </textarea>
                   </div>
                   <div className="textarea-side d-flex flex-column justify-content-between align-items-center">
                     <span role="img" aria-label="Happy Face">😊</span>
@@ -83,9 +73,6 @@ class Tweet extends Component {
             </form>
           </div>
 
-        </div>
-        <div className="tweet-note mx-auto">
-          <p>Note: Tweet character limit is effected by the number of characters in the GIF link.</p>
         </div>
 
       </div> 

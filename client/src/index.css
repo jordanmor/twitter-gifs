@@ -244,19 +244,12 @@ i + i {
   box-shadow: none;
 }
 
-.tweet-form .textArea1,
-.tweet-form .textArea2 {
+.tweet-form .textArea1 {
   font-size: .9rem;
   background-color: var(--off-white);
   border: none;
   box-shadow: none;
   resize: none;
-}
-
-.tweet-form .textArea2 {
-  border-bottom: 1px solid #DCE3E8;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
 }
 
 .textarea-main {
@@ -289,11 +282,6 @@ i + i {
 
 .tweet-btn:hover {
   background-color: var(--calm);
-}
-
-.tweet-note {
-  width: 600px;
-  color: #495057;
 }
 
 /*============-============-============-============
