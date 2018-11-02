@@ -162,6 +162,10 @@ i + i {
   color: var(--calm);
 }
 
+.card-header {
+  font-size: 1.2rem;
+}
+
 .card-img-top {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -172,12 +176,20 @@ i + i {
 }
 
 .fa-twitter {
+  font-size: 1.4rem;
   color: var(--calm);
-  transition: .3s ease-out;
 }
 
-.fa-twitter:hover {
+.fa-heart-o,
+.fa-twitter {
+  transform-origin: center center;
+  transition: .25s ease-out;
+}
+
+.fa-heart-o:hover,
+.fa-twitter:hover  {
   color: var(--calm-darker);
+  transform: scale(1.02);
 }
 
 .profile-page,

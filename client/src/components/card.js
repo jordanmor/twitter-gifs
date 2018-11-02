@@ -8,7 +8,7 @@ const Card = props => {
     <div className="card mb-4 shadow-sm">
       <div className="card-header d-flex align-items-center justify-content-between">
         <i className="fa fa-twitter" onClick={() => props.onPrepareTweet(topic, gif.image)}></i>
-        <i className="fa fa-heart ml-auto"></i>
+        <i className="fa fa-heart-o ml-auto"></i>
       </div>
       <img className="card-img-top" src={gif.image} alt={gif.title} />
       <div className="card-body text-center">
