@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { uploadMedia } = require('../services/uploadMedia');
 const twitterClient = require('../services/twitter-client.js');
 const requireLogin = require('../middleware/requireLogin');
 
@@ -22,10 +23,23 @@ router.get('/tweet', requireLogin, async (req, res) => {
   res.send(tweet);
 });
 
-router.post('/tweet', (req, res) => {
-  twitterClient.post('statuses/update', {status: req.body})
-    .then( tweet => console.log(tweet))
-    .catch( error => {throw error});
+router.post('/tweet', async (req, res) => {
+
+  const mediaId = await uploadMedia(req.body.gif);
+  const status = {
+    status: req.body.text,
+    media_ids: mediaId
+  }
+
+  twitterClient.post('statuses/update', status, function(error, tweet, response) {
+    if (error) {
+      console.log("Error posting tweet");
+      res.status(400).send(error);
+    } else {
+      res.status(201).end();
+    }
+  });
+
 });
 
 module.exports = router;
