@@ -18,8 +18,8 @@ class Tweet extends Component {
   }
 
   populateTextArea = () => {
-    const textAreaText = localStorage.getItem('topic');
-    const gif = localStorage.getItem('gif');
+    const textAreaText = sessionStorage.getItem('topic');
+    const gif = sessionStorage.getItem('gif');
     this.setState({ textAreaText, gif });
   }
 

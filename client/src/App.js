@@ -29,7 +29,7 @@ class App extends Component {
   componentDidMount() {
     this.getTrendsWithGif();
     this.getRandomWordsWithGif();
-    this.persistTopicWithGifsPage();
+    this.cacheTopicWithGifsPage();
     this.getUser();
   }
 
@@ -79,22 +79,16 @@ class App extends Component {
     this.setState({ topicWithGifs });
   }
 
-  persistTopicWithGifsPage = () => {
-    const topic = localStorage.getItem('topic');
-    if(topic) {
-      // const topicHashReplaced = topic.replace('#', 'hashtag_');
-      // if(this.props.location.pathname.indexOf(topicHashReplaced) !== -1) {
-
-      // }
-      this.getTopicWithGifs(topic);
-    }
+  cacheTopicWithGifsPage = () => {
+    const topic = sessionStorage.getItem('topic');
+    if(topic) this.getTopicWithGifs(topic);
   }
 
   handleTopicClick = (topic, pathname) => {
     this.getTopicWithGifs(topic);
     const topicHashReplaced = topic.replace('#', 'hashtag_')
     const path = `${pathname}/${topicHashReplaced}`;
-    localStorage.setItem('topic', topic);
+    sessionStorage.setItem('topic', topic);
     this.props.history.push(path);
   }
 
@@ -108,8 +102,8 @@ class App extends Component {
 
   handlePrepareTweet = (topic, gif) => {
     if(this.state.user) {
-      localStorage.setItem('topic', topic);
-      localStorage.setItem('gif', gif);
+      sessionStorage.setItem('topic', topic);
+      sessionStorage.setItem('gif', gif);
       this.props.history.push('/tweet');
     }
   }
