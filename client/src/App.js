@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Redirect, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 import Nav from './components/nav';
+import Footer from './components/footer';
 import Gallery from './components/gallery';
 import Profile from './components/profile';
 import Tweet from './components/tweet';
@@ -238,6 +239,7 @@ class App extends Component {
             </Route>
           </Switch>
         </main>
+        <Footer />
       </React.Fragment>
     );
   }
