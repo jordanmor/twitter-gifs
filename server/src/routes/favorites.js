@@ -13,7 +13,15 @@ router.get('/', requireLogin, async (req, res, next) => {
 router.post('/', requireLogin, (req, res, next) => {
   // Add current authorized user's id to request body
   req.body.user = req.user._id;
-  const favorite = new Favorite(req.body);
+  const favorite = new Favorite({
+    user: req.user._id,
+    topic: req.body.topic,
+    gif: {
+      id: req.body.gif.id,
+      image: req.body.gif.image,
+      title: req.body.gif.title
+    }
+  });
   favorite.save((err, favorite) => {
     if (err) {
       err.status = 400;
@@ -25,7 +33,7 @@ router.post('/', requireLogin, (req, res, next) => {
 
 // DELETE / - delete a favorite
 router.delete('/:id', requireLogin, async (req, res, next) => {
-  console.log(req.params.id);
+  
   const favorite = await Favorite.findByIdAndRemove(req.params.id);
 
   if (!favorite) {

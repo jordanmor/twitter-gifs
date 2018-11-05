@@ -10,6 +10,7 @@ import Success from './components/success';
 import { getTrends, cleanName } from './services/trendsService';
 import { getGifs } from './services/giphyService';
 import { getRandomWords } from './services/wordnikService';
+import { matchLikedStatusWithFavorites } from './services/likedStatus';
 
 class App extends Component {
 
@@ -22,7 +23,7 @@ class App extends Component {
     message: '',
     limit: {
       trends: 4,
-      random: 1,
+      random: 4,
       topicWithGifs: 4
     }
   }
@@ -40,8 +41,8 @@ class App extends Component {
     const data = trends.map(async trend => {
       const trendName = cleanName(trend.name);
       const gif = await getGifs(trendName, 1);
-      if (gif) {
-        return {id: trend.id, topic: trend.name, gif: gif[0]};
+      if (gif[0].id) {
+        return matchLikedStatusWithFavorites(this.state.favorites, trend.id, trend.name, gif[0]);
       } else {
         return '';
       }
@@ -56,8 +57,8 @@ class App extends Component {
     const data = wordsData.map( async wordData => {
       const word = wordData.word;
       const gif = await getGifs(word, 1);
-      if (gif) {
-        return {id: wordData.id, topic: word, gif: gif[0]};
+      if (gif[0]) {
+        return matchLikedStatusWithFavorites(this.state.favorites, wordData.id, word, gif[0]);
       } else {
         return '';
       }
@@ -71,8 +72,8 @@ class App extends Component {
     const topicName = cleanName(topic);
     const gifs = await getGifs(topicName, limit.topicWithGifs);
     const topicWithGifs = gifs.map(gif => {
-      if (gif) {
-        return {id: gif.id, topic, gif};
+      if (gif.id) {
+        return matchLikedStatusWithFavorites(this.state.favorites, gif.id, topic, gif);
       } else {
         return '';
       }
@@ -115,9 +116,42 @@ class App extends Component {
     // Get favorites from api and store in state
     const { data } = await axios.get('/api/favorites');
     const favorites = data.map(favorite =>
-      ({id: favorite._id, topic: favorite.topic, gif: favorite.gif})
+      ({id: favorite._id, topic: favorite.topic, gif: favorite.gif, liked: true })
     );
     this.setState({ favorites });
+  }
+
+  changeLikedStatus = (id, category) => {
+     // Find clicked card and change status to liked in state
+    const data = this.state[category].map(item => {
+      if(item.id === id) {
+        item.liked = !item.liked;
+        return item;
+      } else {
+        return item;
+      }
+    });
+    this.setState({ [category]: data })
+  }
+
+  handleClickFavorite = async (currentId, topic, gif, liked, category) => {
+    if(liked) {
+      this.changeLikedStatus(currentId, category);
+      await axios.delete(`/api/favorites/${currentId}`);
+      await this.getFavorites();
+    } else {
+      // Find clicked card and change status to liked in state
+      this.changeLikedStatus(currentId, category);
+      // Save clicked card to database as favorite
+      await axios.post('/api/favorites', {topic, gif});
+      // Retrieve updated list of favorites from database and save to state
+      await this.getFavorites();
+      // Update relevant category's state to reflect new liked card
+      const dataLiked = this.state[category].map(item => {
+        return matchLikedStatusWithFavorites(this.state.favorites, item.id, item.topic, item.gif);
+      });
+      this.setState({ [category]: dataLiked });
+    }
   }
 
   getUser = async() => {
@@ -154,8 +188,10 @@ class App extends Component {
                 <Gallery
                   {...props}
                   data={randomWordsWithGif}
+                  category={"randomWordsWithGif"}
                   onTopicClick={this.handleTopicClick}
                   onPrepareTweet={this.handlePrepareTweet}
+                  onClickFavorite={this.handleClickFavorite}
                 />
               }>
             </Route>
@@ -164,7 +200,9 @@ class App extends Component {
               render={() => 
                 <Gallery
                   data={topicWithGifs}
+                  category={"topicWithGifs"}
                   onPrepareTweet={this.handlePrepareTweet}
+                  onClickFavorite={this.handleClickFavorite}
                 />
               }>
             </Route>
@@ -174,8 +212,10 @@ class App extends Component {
                 <Gallery
                   {...props}
                   data={trendsWithGif}
+                  category={"trendsWithGif"}
                   onTopicClick={this.handleTopicClick}
                   onPrepareTweet={this.handlePrepareTweet}
+                  onClickFavorite={this.handleClickFavorite}
                 />
               }>
             </Route>
@@ -184,7 +224,9 @@ class App extends Component {
               render={() => 
                 <Gallery
                   data={topicWithGifs}
+                  category={"topicWithGifs"}
                   onPrepareTweet={this.handlePrepareTweet}
+                  onClickFavorite={this.handleClickFavorite}
                 />
               }>
             </Route>
@@ -193,7 +235,9 @@ class App extends Component {
               render={() => 
                 <Gallery
                   data={topicWithGifs}
+                  category={"topicWithGifs"}
                   onPrepareTweet={this.handlePrepareTweet}
+                  onClickFavorite={this.handleClickFavorite}
                 />
               }>
             </Route>
@@ -220,8 +264,9 @@ class App extends Component {
                 <Gallery
                   data={favorites}
                   user={user}
-                  favorites={true}
+                  category={"favorites"}
                   onPrepareTweet={this.handlePrepareTweet}
+                  onClickFavorite={this.handleClickFavorite}
                 />
               }>
             </Route>

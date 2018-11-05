@@ -11,6 +11,10 @@ const FavoriteSchema = new Schema({
     required: [true, 'A favorite is required']
   },
   gif: {
+    id: {
+      type: String,
+      required: true
+    },
     image: {
       type: String,
       required: true

@@ -1,9 +1,11 @@
 import React from 'react';
 import Card from './card';
 
-const Gallery = ({ data, onTopicClick, location, favorites, user, onPrepareTweet }) => {
+const Gallery = props => {
 
-  if (favorites && !user) return <div className="container favorites-page">Please log in to your Twitter account to see your favorites</div>
+  const { data, onTopicClick, location, category, user, onPrepareTweet, onClickFavorite } = props;
+ 
+  if (category === "favorites" && !user) return <div className="container favorites-page">Please log in to your Twitter account to see your favorites</div>
 
   return ( 
     <div className="gallery bg-light">
@@ -13,12 +15,16 @@ const Gallery = ({ data, onTopicClick, location, favorites, user, onPrepareTweet
             if(item.gif) {
               return (
                 <Card 
-                  key={item.id} 
+                  key={item.id}
+                  id={item.id}
                   topic={item.topic}
                   gif={item.gif}
                   onTopicClick={onTopicClick}
                   location={location}
                   onPrepareTweet={onPrepareTweet}
+                  onClickFavorite={onClickFavorite}
+                  liked={item.liked}
+                  category={category}
                 />
               );
             } else {
