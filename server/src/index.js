@@ -1,6 +1,7 @@
 const config = require('config');
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
@@ -46,6 +47,11 @@ app.use(
 app.use(passport.initialize());
 //Restore session
 app.use(passport.session());
+
+if(process.env.NODE_ENV = 'development') {
+  //Enable CORS Pre-Flight
+  app.options('*', cors());
+}
 
 app.use('/api/favorites', favorites);
 app.use('/api/twitter', twitter);
