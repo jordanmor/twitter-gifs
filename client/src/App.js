@@ -11,6 +11,7 @@ import { getTrends, cleanName } from './services/trendsService';
 import { getGifs } from './services/giphyService';
 import { getRandomWords } from './services/wordnikService';
 import { matchLikedStatusWithFavorites } from './services/likedStatus';
+import uniqueString from 'unique-string';
 
 class App extends Component {
 
@@ -23,61 +24,62 @@ class App extends Component {
     message: '',
     limit: {
       trends: 4,
-      random: 1,
+      random: 4,
       topicWithGifs: 4
     }
   }
 
   componentDidMount() {
+    this.getUser();
     this.getTrendsWithGif();
     this.getRandomWordsWithGif();
     this.cacheTopicWithGifsPage();
-    this.getUser();
   }
 
   getTrendsWithGif = async () => {
-    const { limit } = this.state;
-    const trends = await getTrends(limit.trends);
-    const data = trends.map(async trend => {
+    const trends = await getTrends(this.state.limit.trends);
+
+    const trendsWithGif = await trends.reduce( async (result, trend) => {
+      const collection = await result;
       const trendName = cleanName(trend.name);
       const gif = await getGifs(trendName, 1);
-      if (gif[0].id) {
-        return matchLikedStatusWithFavorites(this.state.favorites, trend.id, trend.name, gif[0]);
-      } else {
-        return '';
+      if (gif[0]) {
+        const twitterGif = {id: trend.id, topic: trend.name, gif: gif[0]};
+        collection.push(matchLikedStatusWithFavorites(this.state.favorites, twitterGif));
       }
-    });
-    const trendsWithGif = await Promise.all(data);
+      return collection;
+    }, Promise.resolve([]));
+
     this.setState({ trendsWithGif });
   }
 
   getRandomWordsWithGif = async () => {
-    const { limit } = this.state;
-    const wordsData = await getRandomWords(limit.random);
-    const data = wordsData.map( async wordData => {
+    const wordsData = await getRandomWords(this.state.limit.random);
+
+    const randomWordsWithGif = await wordsData.reduce( async (result, wordData) => {
+      const collection = await result;
       const word = wordData.word;
       const gif = await getGifs(word, 1);
       if (gif[0]) {
-        return matchLikedStatusWithFavorites(this.state.favorites, wordData.id, word, gif[0]);
-      } else {
-        return '';
+        const twitterGif = {id: wordData.id, topic: word, gif: gif[0]};
+        collection.push(matchLikedStatusWithFavorites(this.state.favorites, twitterGif));
       }
-    });
-    const randomWordsWithGif = await Promise.all(data);
+      return collection;
+    }, Promise.resolve([]));
+
     this.setState({ randomWordsWithGif });
   }
 
   getTopicWithGifs = async topic => {
     const { limit } = this.state;
     const topicName = cleanName(topic);
+
     const gifs = await getGifs(topicName, limit.topicWithGifs);
     const topicWithGifs = gifs.map(gif => {
-      if (gif.id) {
-        return matchLikedStatusWithFavorites(this.state.favorites, gif.id, topic, gif);
-      } else {
-        return '';
-      }
+      const twitterGif = {id: gif.id, topic, gif};
+      return matchLikedStatusWithFavorites(this.state.favorites, twitterGif);
     });
+
     this.setState({ topicWithGifs });
   }
 
@@ -94,6 +96,14 @@ class App extends Component {
     this.props.history.push(path);
   }
 
+  handlePrepareTweet = (topic, gif) => {
+    if(this.state.user) {
+      sessionStorage.setItem('topic', topic);
+      sessionStorage.setItem('gif', gif);
+      this.props.history.push('/tweet');
+    }
+  }
+
   handlePostTweet = async (text, gif) => {
     this.setState({ message: "Sending tweet..." });
     this.props.history.push('/tweet/success');
@@ -102,14 +112,6 @@ class App extends Component {
     setTimeout(() => {
       this.props.history.push('/');
     }, 1000);
-  }
-
-  handlePrepareTweet = (topic, gif) => {
-    if(this.state.user) {
-      sessionStorage.setItem('topic', topic);
-      sessionStorage.setItem('gif', gif);
-      this.props.history.push('/tweet');
-    }
   }
 
   getFavorites = async () => {
@@ -126,6 +128,7 @@ class App extends Component {
     const data = this.state[category].map(item => {
       if(item.id === id) {
         item.liked = !item.liked;
+        item.id = uniqueString();
         return item;
       } else {
         return item;
@@ -138,9 +141,20 @@ class App extends Component {
     const { id: currentId, topic, gif, liked, category } = data;
     if(this.state.user) {
       if(liked) {
-        this.changeLikedStatus(currentId, category);
-        await axios.delete(`/api/favorites/${currentId}`);
-        await this.getFavorites();
+        if(category === 'favorites') {
+          const categories = ['favorites', 'trendsWithGif', 'randomWordsWithGif', 'topicWithGifs'];
+          categories.forEach(category => this.changeLikedStatus(currentId, category));
+          await axios.delete(`/api/favorites/${currentId}`);
+          this.getFavorites();
+        } else {
+          this.changeLikedStatus(currentId, category);
+          await axios.delete(`/api/favorites/${currentId}`);
+          await this.getFavorites();
+          const twitterGifs = await this.state[category].map( twitterGif => {
+            return matchLikedStatusWithFavorites(this.state.favorites, twitterGif);
+          });
+          this.setState({ [category]: twitterGifs });
+        }
       } else {
         // Find clicked card and change status to liked in state
         this.changeLikedStatus(currentId, category);
@@ -148,12 +162,11 @@ class App extends Component {
         await axios.post('/api/favorites', {topic, gif});
         // Retrieve updated list of favorites from database and save to state
         await this.getFavorites();
-        const { favorites } = this.state;
         // Update relevant category's state to reflect new liked card
-        const dataLiked = await this.state[category].map( item => {
-          return matchLikedStatusWithFavorites(favorites, item.id, item.topic, item.gif);
+        const twitterGifs = await this.state[category].map( twitterGif => {
+          return matchLikedStatusWithFavorites(this.state.favorites, twitterGif);
         });
-        this.setState({ [category]: dataLiked });
+        this.setState({ [category]: twitterGifs });
       }
     }
   }
