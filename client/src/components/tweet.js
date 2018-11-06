@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
+import 'emoji-mart/css/emoji-mart.css';
+import emojiData from 'emoji-mart/data/twitter.json'
+import { NimblePicker } from 'emoji-mart'
+ 
 class Tweet extends Component {
 
   state = {
     textAreaText: '',
-    gif: ''
+    gif: '',
+    showEmojiPicker: false
   }
 
   componentDidMount() {
@@ -21,6 +25,22 @@ class Tweet extends Component {
     const textAreaText = sessionStorage.getItem('topic');
     const gif = sessionStorage.getItem('gif');
     this.setState({ textAreaText, gif });
+  }
+
+  hideEmojiPicker = () => {
+    if(this.state.showEmojiPicker === true) {
+      this.setState({ showEmojiPicker: false });
+    }
+  }
+
+  toggleEmojiPicker = () => {
+    const showEmojiPicker = !this.state.showEmojiPicker;
+    this.setState({ showEmojiPicker });
+  }
+
+  addEmoji = emoji => {
+    const textAreaText = this.state.textAreaText + emoji.native;
+    this.setState({ textAreaText });
   }
 
   render() { 
@@ -55,12 +75,27 @@ class Tweet extends Component {
                       name="tweet-text"
                       value={textAreaText}
                       onChange={this.onTextInputChange}
+                      onClick={this.hideEmojiPicker}
                       autoFocus
                     >
                     </textarea>
                   </div>
                   <div className="textarea-side d-flex flex-column justify-content-between align-items-center">
-                    <span role="img" aria-label="Happy Face">😊</span>
+                    <div className="emoji-container">
+                      <span onClick={this.toggleEmojiPicker} className="emojiImage" role="img" aria-label="Happy Face">😊</span>
+                      {this.state.showEmojiPicker 
+                        ?
+                          <NimblePicker 
+                            className="emoji"
+                            set='twitter' 
+                            data={emojiData} 
+                            title='Pick your emoji…' emoji='point_up'
+                            onSelect={this.addEmoji}
+                            emojiSize={18}
+                          />
+                        : null
+                      }
+                    </div>
                     <span>{totalChars}</span>
                   </div>
                 </div>

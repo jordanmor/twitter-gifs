@@ -296,6 +296,21 @@ i + i {
   background-color: var(--calm);
 }
 
+.emoji-container {
+  position: relative;
+}
+
+.emoji-mart {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  font-size: 14px;
+}
+
+.emoji-mart-title-label {
+  font-size: 18px;
+}
+
 /*============-============-============-============
                         FOOTER
 ==============-============-============-==========*/
