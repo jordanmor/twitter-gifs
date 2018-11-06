@@ -5,7 +5,7 @@ import Nav from './components/nav';
 import Footer from './components/footer';
 import Gallery from './components/gallery';
 import Profile from './components/profile';
-import Tweet from './components/tweet';
+import Tweet from './components/Tweet';
 import Success from './components/success';
 import { getTrends, cleanName } from './services/trendsService';
 import { getGifs } from './services/giphyService';
