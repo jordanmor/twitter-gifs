@@ -3,7 +3,9 @@ import { NavLink } from 'react-router-dom';
 import Login from './login';
 import SearchForm from './searchForm';
 
-const Nav = ({ count, user, onSearch }) => {
+const Nav = props => {
+
+  const { count, user, onSearch } = props;
 
   return ( 
     <React.Fragment>

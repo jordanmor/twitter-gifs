@@ -3,7 +3,7 @@ import Card from './card';
 
 const Gallery = props => {
 
-  const { data, onTopicClick, location, category, user, onPrepareTweet, onClickFavorite } = props;
+  const { data, user, category, location, onTopicClick, onPrepareTweet, onClickFavorite } = props;
  
   if (category === "favorites" && !user) return <div className="container favorites-page">Please log in to your Twitter account to see your favorites</div>
 
@@ -19,12 +19,12 @@ const Gallery = props => {
                   id={item.id}
                   topic={item.topic}
                   gif={item.gif}
-                  onTopicClick={onTopicClick}
+                  category={category}
+                  liked={item.liked}
                   location={location}
+                  onTopicClick={onTopicClick}
                   onPrepareTweet={onPrepareTweet}
                   onClickFavorite={onClickFavorite}
-                  liked={item.liked}
-                  category={category}
                 />
               );
             } else {

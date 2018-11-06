@@ -23,7 +23,7 @@ class App extends Component {
     message: '',
     limit: {
       trends: 4,
-      random: 4,
+      random: 1,
       topicWithGifs: 4
     }
   }
@@ -122,7 +122,7 @@ class App extends Component {
   }
 
   changeLikedStatus = (id, category) => {
-     // Find clicked card and change status to liked in state
+     // Find clicked card and change liked status in state
     const data = this.state[category].map(item => {
       if(item.id === id) {
         item.liked = !item.liked;
@@ -134,23 +134,27 @@ class App extends Component {
     this.setState({ [category]: data })
   }
 
-  handleClickFavorite = async (currentId, topic, gif, liked, category) => {
-    if(liked) {
-      this.changeLikedStatus(currentId, category);
-      await axios.delete(`/api/favorites/${currentId}`);
-      await this.getFavorites();
-    } else {
-      // Find clicked card and change status to liked in state
-      this.changeLikedStatus(currentId, category);
-      // Save clicked card to database as favorite
-      await axios.post('/api/favorites', {topic, gif});
-      // Retrieve updated list of favorites from database and save to state
-      await this.getFavorites();
-      // Update relevant category's state to reflect new liked card
-      const dataLiked = this.state[category].map(item => {
-        return matchLikedStatusWithFavorites(this.state.favorites, item.id, item.topic, item.gif);
-      });
-      this.setState({ [category]: dataLiked });
+  handleClickFavorite = async data => {
+    const { id: currentId, topic, gif, liked, category } = data;
+    if(this.state.user) {
+      if(liked) {
+        this.changeLikedStatus(currentId, category);
+        await axios.delete(`/api/favorites/${currentId}`);
+        await this.getFavorites();
+      } else {
+        // Find clicked card and change status to liked in state
+        this.changeLikedStatus(currentId, category);
+        // Save clicked card to database as favorite
+        await axios.post('/api/favorites', {topic, gif});
+        // Retrieve updated list of favorites from database and save to state
+        await this.getFavorites();
+        const { favorites } = this.state;
+        // Update relevant category's state to reflect new liked card
+        const dataLiked = await this.state[category].map( item => {
+          return matchLikedStatusWithFavorites(favorites, item.id, item.topic, item.gif);
+        });
+        this.setState({ [category]: dataLiked });
+      }
     }
   }
 

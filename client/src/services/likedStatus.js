@@ -3,6 +3,7 @@
 function matchLikedStatusWithFavorites(favorites, id, topic, gif) {
   
   for(let i = 0; i < favorites.length; i++) {
+
     if(favorites[i].gif.id === gif.id && favorites[i].topic === topic) {
       return {id: favorites[i].id, topic, gif, liked: true};
     }
