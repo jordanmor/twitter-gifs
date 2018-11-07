@@ -1,5 +1,5 @@
 import React from 'react';
-import Like from './common/like';
+import Like from '../common/like';
 
 const Card = props => {
 

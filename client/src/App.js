@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter, Redirect, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
-import Nav from './components/nav';
+import Nav from './components/Nav';
 import Footer from './components/footer';
-import Gallery from './components/gallery';
+import Gallery from './components/Gallery';
 import Profile from './components/profile';
 import Tweet from './components/Tweet';
 import Success from './components/success';
