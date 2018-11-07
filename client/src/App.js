@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Main from './components/main';
 import Nav from './components/Nav';
 import Footer from './components/footer';
+import Loader from './components/common/loader';
 import { getTrends, cleanName } from './services/trendsService';
 import { getGifs } from './services/giphyService';
 import { getRandomWords } from './services/wordnikService';
@@ -23,7 +24,8 @@ class App extends Component {
       trends: 2,
       random: 2,
       topicWithGifs: 2
-    }
+    },
+    loading: false
   }
 
   componentDidMount() {
@@ -34,6 +36,7 @@ class App extends Component {
   }
 
   getTrendsWithGif = async () => {
+    this.setState({ loading: true });
     const trends = await getTrends(this.state.limit.trends);
 
     const trendsWithGif = await trends.reduce( async (result, trend) => {
@@ -47,10 +50,11 @@ class App extends Component {
       return collection;
     }, Promise.resolve([]));
 
-    this.setState({ trendsWithGif });
+    this.setState({ trendsWithGif, loading: false });
   }
 
   getRandomWordsWithGif = async () => {
+    this.setState({ loading: true });
     const randomWords = await getRandomWords(this.state.limit.random);
 
     const randomWordsWithGif = await randomWords.reduce( async (result, randomWord) => {
@@ -64,10 +68,11 @@ class App extends Component {
       return collection;
     }, Promise.resolve([]));
 
-    this.setState({ randomWordsWithGif });
+    this.setState({ randomWordsWithGif, loading: false });
   }
 
   getTopicWithGifs = async topic => {
+    this.setState({ loading: true });
     const topicName = cleanName(topic);
 
     const gifs = await getGifs(topicName, this.state.limit.topicWithGifs);
@@ -76,7 +81,7 @@ class App extends Component {
       return matchLikedStatusWithFavorites(this.state.favorites, twitterGif);
     });
 
-    this.setState({ topicWithGifs });
+    this.setState({ topicWithGifs, loading: false });
   }
 
   cacheTopicWithGifsPage = () => {
@@ -185,7 +190,7 @@ class App extends Component {
   }
 
   render() {
-    const { trendsWithGif, topicWithGifs, randomWordsWithGif, favorites, user, message } = this.state;
+    const { trendsWithGif, topicWithGifs, randomWordsWithGif, favorites, user, message, loading } = this.state;
 
     return (
       <React.Fragment>
@@ -196,19 +201,24 @@ class App extends Component {
             user={user}
           />
         </header>
-        <Main 
-          trendsWithGif={trendsWithGif}
-          topicWithGifs={topicWithGifs}
-          randomWordsWithGif={randomWordsWithGif}
-          favorites={favorites}
-          user={user}
-          message={message}
-          location={this.props.location.pathname}
-          onTopicClick={this.handleTopicClick}
-          onPrepareTweet={this.handlePrepareTweet}
-          onClickFavorite={this.handleClickFavorite}
-          onPostTweet={this.handlePostTweet}
-        />
+        { loading
+          ? 
+            <Loader />
+          : 
+            <Main 
+              trendsWithGif={trendsWithGif}
+              topicWithGifs={topicWithGifs}
+              randomWordsWithGif={randomWordsWithGif}
+              favorites={favorites}
+              user={user}
+              message={message}
+              location={this.props.location.pathname}
+              onTopicClick={this.handleTopicClick}
+              onPrepareTweet={this.handlePrepareTweet}
+              onClickFavorite={this.handleClickFavorite}
+              onPostTweet={this.handlePostTweet}
+            />
+        }
         <Footer />
       </React.Fragment>
     );
