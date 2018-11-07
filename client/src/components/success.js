@@ -6,7 +6,7 @@ const Success = props => {
 
   return ( 
     <div className="container mt-4">
-      <div className="tweet-container mx-auto mb-5">
+      <div className="success mx-auto my-5">
         <h1 className="text-center">{props.message}</h1>
       </div>
     </div>
