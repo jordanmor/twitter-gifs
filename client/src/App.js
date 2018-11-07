@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { withRouter, Redirect, Switch, Route } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import Main from './components/main';
 import Nav from './components/Nav';
 import Footer from './components/footer';
-import Gallery from './components/Gallery';
-import Profile from './components/profile';
-import Tweet from './components/Tweet';
-import Success from './components/success';
 import { getTrends, cleanName } from './services/trendsService';
 import { getGifs } from './services/giphyService';
 import { getRandomWords } from './services/wordnikService';
@@ -197,110 +194,19 @@ class App extends Component {
             user={user}
           />
         </header>
-        <main role="main">
-          <Switch>
-            <Route 
-              exact path="/randomTopics"
-              render={props => 
-                <Gallery
-                  {...props}
-                  data={randomWordsWithGif}
-                  category={"randomWordsWithGif"}
-                  onTopicClick={this.handleTopicClick}
-                  onPrepareTweet={this.handlePrepareTweet}
-                  onClickFavorite={this.handleClickFavorite}
-                />
-              }>
-            </Route>
-            <Route 
-              path="/randomTopics/:topic"
-              render={() => 
-                <Gallery
-                  data={topicWithGifs}
-                  category={"topicWithGifs"}
-                  onPrepareTweet={this.handlePrepareTweet}
-                  onClickFavorite={this.handleClickFavorite}
-                />
-              }>
-            </Route>
-            <Route 
-              exact path="/trends"
-              render={props => 
-                <Gallery
-                  {...props}
-                  data={trendsWithGif}
-                  category={"trendsWithGif"}
-                  onTopicClick={this.handleTopicClick}
-                  onPrepareTweet={this.handlePrepareTweet}
-                  onClickFavorite={this.handleClickFavorite}
-                />
-              }>
-            </Route>
-            <Route 
-              path="/trends/:topic"
-              render={() => 
-                <Gallery
-                  data={topicWithGifs}
-                  category={"topicWithGifs"}
-                  onPrepareTweet={this.handlePrepareTweet}
-                  onClickFavorite={this.handleClickFavorite}
-                />
-              }>
-            </Route>
-            <Route 
-              path="/search/:id"
-              render={() => 
-                <Gallery
-                  data={topicWithGifs}
-                  category={"topicWithGifs"}
-                  onPrepareTweet={this.handlePrepareTweet}
-                  onClickFavorite={this.handleClickFavorite}
-                />
-              }>
-            </Route>
-            <Route 
-              exact path="/tweet/success"
-              render={() => 
-                <Success
-                  message={message}
-                />
-              }>
-            </Route>
-            <Route 
-              exact path="/tweet"
-              render={() => 
-                <Tweet
-                  userPhoto={user.photo}
-                  onPostTweet={this.handlePostTweet}
-                />
-              }>
-            </Route>
-            <Route 
-              path="/favorites"
-              render={() => 
-                <Gallery
-                  data={favorites}
-                  user={user}
-                  category={"favorites"}
-                  onPrepareTweet={this.handlePrepareTweet}
-                  onClickFavorite={this.handleClickFavorite}
-                />
-              }>
-            </Route>
-            <Route 
-              exact path="/profile"
-              render={() => 
-                <Profile
-                  user={user}
-                />
-              }>
-            </Route>
-            <Route 
-              exact path="/"
-              render={() => <Redirect to="/trends" /> }>
-            </Route>
-          </Switch>
-        </main>
+        <Main 
+          trendsWithGif={trendsWithGif}
+          topicWithGifs={topicWithGifs}
+          randomWordsWithGif={randomWordsWithGif}
+          favorites={favorites}
+          user={user}
+          message={message}
+          location={this.props.location.pathname}
+          onTopicClick={this.handleTopicClick}
+          onPrepareTweet={this.handlePrepareTweet}
+          onClickFavorite={this.handleClickFavorite}
+          onPostTweet={this.handlePostTweet}
+        />
         <Footer />
       </React.Fragment>
     );

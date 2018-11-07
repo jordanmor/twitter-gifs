@@ -17,7 +17,7 @@ const Card = props => {
         {
           props.onTopicClick 
             ?
-              <button onClick={() => props.onTopicClick(topic, location.pathname)} type="button" className="btn btn-outline-secondary">{topic}</button>
+              <button onClick={() => props.onTopicClick(topic, location)} type="button" className="btn btn-outline-secondary">{topic}</button>
             :
               <p className="">{topic}</p>
         }
