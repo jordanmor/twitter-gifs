@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
 import Main from './components/main';
 import Nav from './components/Nav';
 import Footer from './components/footer';
@@ -8,6 +7,7 @@ import { getTrends, cleanName } from './services/trendsService';
 import { getGifs } from './services/giphyService';
 import { getRandomWords } from './services/wordnikService';
 import { matchLikedStatusWithFavorites } from './services/likedStatus';
+import axios from 'axios';
 import uniqueString from 'unique-string';
 
 class App extends Component {
@@ -20,9 +20,9 @@ class App extends Component {
     topicWithGifs: [],
     message: '',
     limit: {
-      trends: 4,
-      random: 4,
-      topicWithGifs: 4
+      trends: 2,
+      random: 2,
+      topicWithGifs: 2
     }
   }
 
@@ -51,14 +51,14 @@ class App extends Component {
   }
 
   getRandomWordsWithGif = async () => {
-    const wordsData = await getRandomWords(this.state.limit.random);
+    const randomWords = await getRandomWords(this.state.limit.random);
 
-    const randomWordsWithGif = await wordsData.reduce( async (result, wordData) => {
+    const randomWordsWithGif = await randomWords.reduce( async (result, randomWord) => {
       const collection = await result;
-      const word = wordData.word;
-      const gif = await getGifs(word, 1);
+      const { id, word: topic } = randomWord;
+      const gif = await getGifs(topic, 1);
       if (gif[0]) {
-        const twitterGif = {id: wordData.id, topic: word, gif: gif[0]};
+        const twitterGif = {id, topic, gif: gif[0]};
         collection.push(matchLikedStatusWithFavorites(this.state.favorites, twitterGif));
       }
       return collection;
@@ -68,10 +68,9 @@ class App extends Component {
   }
 
   getTopicWithGifs = async topic => {
-    const { limit } = this.state;
     const topicName = cleanName(topic);
 
-    const gifs = await getGifs(topicName, limit.topicWithGifs);
+    const gifs = await getGifs(topicName, this.state.limit.topicWithGifs);
     const topicWithGifs = gifs.map(gif => {
       const twitterGif = {id: gif.id, topic, gif};
       return matchLikedStatusWithFavorites(this.state.favorites, twitterGif);
@@ -111,6 +110,20 @@ class App extends Component {
     }, 1000);
   }
 
+  changeLikedStatus = (id, category) => {
+    // Find clicked card and change liked status in state
+   const twitterGifs = this.state[category].map(twitterGif => {
+     if(twitterGif.id === id) {
+       twitterGif.liked = !twitterGif.liked;
+       twitterGif.id = uniqueString();
+       return twitterGif;
+     } else {
+       return twitterGif;
+     }
+   });
+   this.setState({ [category]: twitterGifs })
+ }
+
   getFavorites = async () => {
     // Get favorites from api and store in state
     const { data } = await axios.get('/api/favorites');
@@ -120,51 +133,40 @@ class App extends Component {
     this.setState({ favorites });
   }
 
-  changeLikedStatus = (id, category) => {
-     // Find clicked card and change liked status in state
-    const data = this.state[category].map(item => {
-      if(item.id === id) {
-        item.liked = !item.liked;
-        item.id = uniqueString();
-        return item;
-      } else {
-        return item;
-      }
-    });
-    this.setState({ [category]: data })
+  deleteFavorite = async id => {
+    await axios.delete(`/api/favorites/${id}`);
+    await this.getFavorites();
+  }
+
+  saveFavorite = async (topic, gif) => {
+    await axios.post('/api/favorites', {topic, gif});
+    await this.getFavorites();
+  }
+
+  updateLikedStatus = category => {
+    // Update relevant category's state to reflect new liked card
+    const twitterGifs = this.state[category].map( twitterGif =>
+      matchLikedStatusWithFavorites(this.state.favorites, twitterGif));
+
+    this.setState({ [category]: twitterGifs });
   }
 
   handleClickFavorite = async data => {
     const { id: currentId, topic, gif, liked, category } = data;
+    let categories = [];
     if(this.state.user) {
       if(liked) {
-        if(category === 'favorites') {
-          const categories = ['favorites', 'trendsWithGif', 'randomWordsWithGif', 'topicWithGifs'];
-          categories.forEach(category => this.changeLikedStatus(currentId, category));
-          await axios.delete(`/api/favorites/${currentId}`);
-          this.getFavorites();
-        } else {
-          this.changeLikedStatus(currentId, category);
-          await axios.delete(`/api/favorites/${currentId}`);
-          await this.getFavorites();
-          const twitterGifs = await this.state[category].map( twitterGif => {
-            return matchLikedStatusWithFavorites(this.state.favorites, twitterGif);
-          });
-          this.setState({ [category]: twitterGifs });
-        }
+        categories = ['favorites', 'topicWithGifs', 'trendsWithGif', 'randomWordsWithGif'];
+        // Changes liked status of all cards that match the deleted favorite's id
+        categories.forEach(category => this.changeLikedStatus(currentId, category));
+        await this.deleteFavorite(currentId);
       } else {
-        // Find clicked card and change status to liked in state
-        this.changeLikedStatus(currentId, category);
-        // Save clicked card to database as favorite
-        await axios.post('/api/favorites', {topic, gif});
-        // Retrieve updated list of favorites from database and save to state
-        await this.getFavorites();
-        // Update relevant category's state to reflect new liked card
-        const twitterGifs = await this.state[category].map( twitterGif => {
-          return matchLikedStatusWithFavorites(this.state.favorites, twitterGif);
-        });
-        this.setState({ [category]: twitterGifs });
-      }
+          this.changeLikedStatus(currentId, category);
+          await this.saveFavorite(topic, gif);
+          categories = ['topicWithGifs', 'trendsWithGif', 'randomWordsWithGif'];
+          // Matches id of liked cards to the saved favorite's id
+          categories.forEach(category => this.updateLikedStatus(category));
+        }
     }
   }
 
@@ -176,7 +178,7 @@ class App extends Component {
     if (response.status === 200 ) {
       user = response.data;
       this.setState({ user });
-      this.getFavorites();
+      this.getFavorites(); // only load favorites when user logs in
     } else {
       this.setState({ user: '' });
     }
