@@ -25,6 +25,12 @@ class Tweet extends Component {
     this.setState({ textAreaText, gif });
   }
 
+  handleSubmit = e => {
+    const { textAreaText, gif } = this.state; 
+    e.preventDefault();
+    this.props.onPostTweet(textAreaText, gif)
+  }
+
   hideEmojiPicker = () => {
     if(this.state.showEmojiPicker === true) {
       this.setState({ showEmojiPicker: false });
@@ -43,7 +49,7 @@ class Tweet extends Component {
 
   render() { 
 
-    const { userPhoto, onPostTweet } = this.props;
+    const { userPhoto } = this.props;
     const { textAreaText, gif, showEmojiPicker } = this.state;
 
     return ( 
@@ -57,11 +63,11 @@ class Tweet extends Component {
 
           <div className="tweet-body d-flex justify-content-start align-items-start mb-3">
             <img className="tweet-photo" src={userPhoto} alt=""/>
-            <Form 
+            <Form
+              onSubmit={this.handleSubmit}
               textAreaText={textAreaText}
               gif={gif}
               showEmojiPicker={showEmojiPicker}
-              onPostTweet={onPostTweet}
               toggleEmojiPicker={this.toggleEmojiPicker}
               hideEmojiPicker={this.hideEmojiPicker}
               onTextInputChange={this.onTextInputChange}

@@ -3,10 +3,10 @@ import Textarea from './textarea';
 
 const Form = props => {
 
-  const { textAreaText, gif, onPostTweet } = props;
+  const { textAreaText, gif, onSubmit } = props;
 
   return ( 
-    <form className="tweet-form d-flex flex-column">
+    <form className="tweet-form d-flex flex-column" onSubmit={onSubmit}>
 
       <div className="form-group">
 
@@ -25,9 +25,8 @@ const Form = props => {
 
       </div>
 
-      <button 
-        onClick={() => onPostTweet(textAreaText, gif)}
-        type="button" 
+      <button
+        type="submit" 
         className="tweet-btn btn btn-primary align-self-end"
       >Tweet
       </button>

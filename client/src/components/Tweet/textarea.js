@@ -14,7 +14,9 @@ const Textarea = props => {
       <div className="textarea-main">
         <textarea 
           className="form-control textArea1" 
-          id="tweetTextArea" 
+          id="tweetTextArea"
+          required
+          minLength="1"
           maxLength={props.textAreaMaxLength} 
           rows="5"
           name="tweet-text"

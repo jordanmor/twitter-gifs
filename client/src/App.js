@@ -104,7 +104,7 @@ class App extends Component {
       sessionStorage.setItem('gif', gif);
       this.props.history.push('/tweet');
     } else {
-      toast("Please log in to your Twitter account to post tweets.");
+        toast("Please log in to your Twitter account to post tweets.");
     }
   }
 
@@ -176,7 +176,7 @@ class App extends Component {
           categories.forEach(category => this.updateLikedStatus(category));
         }
     } else {
-      toast("Please log in to your Twitter account to save your favorite Twitter GIFs.");
+        toast("Please log in to your Twitter account to save your favorite Twitter GIFs.");
     }
   }
 
