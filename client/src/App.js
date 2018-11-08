@@ -8,6 +8,7 @@ import { getTrends, cleanName } from './services/trendsService';
 import { getGifs } from './services/giphyService';
 import { getRandomWords } from './services/wordnikService';
 import { matchLikedStatusWithFavorites } from './services/likedStatus';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import uniqueString from 'unique-string';
 
@@ -102,6 +103,8 @@ class App extends Component {
       sessionStorage.setItem('topic', topic);
       sessionStorage.setItem('gif', gif);
       this.props.history.push('/tweet');
+    } else {
+      toast("Please log in to your Twitter account to post tweets.");
     }
   }
 
@@ -172,6 +175,8 @@ class App extends Component {
           // Matches id of liked cards to the saved favorite's id
           categories.forEach(category => this.updateLikedStatus(category));
         }
+    } else {
+      toast("Please log in to your Twitter account to save your favorite Twitter GIFs.");
     }
   }
 

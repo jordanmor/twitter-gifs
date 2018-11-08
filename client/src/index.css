@@ -201,6 +201,10 @@ main {
   color: var(--calm-darker); 
 }
 
+.favorites-page {
+  height: 300px;
+}
+
 .profile-photo {
   width: 250px;
   height: 250px;
@@ -314,6 +318,20 @@ main {
 
 .success {
   height: 300px;
+}
+
+.Toastify__toast {
+  border-radius: 4px;
+}
+
+.Toastify__toast--default {
+  color: var(--calm-darker);
+  background: var(--off-white);
+  border: 8px solid var(--calm-darker);
+}
+
+.Toastify__close-button {
+  color: var(--calm-darker);
 }
 
 /*============-============-============-============

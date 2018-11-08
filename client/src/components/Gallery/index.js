@@ -1,11 +1,18 @@
 import React from 'react';
 import Card from './card';
+import { ToastContainer } from 'react-toastify';
 
 const Gallery = props => {
 
   const { data, user, category, location, onTopicClick, onPrepareTweet, onClickFavorite } = props;
  
-  if (category === "favorites" && !user) return <div className="container favorites-page">Please log in to your Twitter account to see your favorites</div>
+  if (category === "favorites" && !user) {
+    return (
+      <div className="container favorites-page">
+        Please log in to your Twitter account to see your favorites Twitter Gifs
+      </div>
+    );
+  }
 
   return ( 
     <div className="gallery bg-light">
@@ -34,6 +41,10 @@ const Gallery = props => {
         )}
         </div>
       </div>
+      <ToastContainer
+        autoClose={3500}
+        hideProgressBar
+      />
     </div>
    );
 }
