@@ -14,15 +14,20 @@ passport.use(new TwitterStrategy({
   }, 
   async function(token, tokenSecret, profile, done){
     
-    const existingUser = await User.findOne({twitterId: profile.id});
+    const existingUser = await User.findOne({ twitter: { id: profile.id }});
+
     if (existingUser) {
       done(null, existingUser);
     } else {
       const user = await new User({
-        twitterId: profile.id,
         name: profile.displayName,
         username: profile.username,
-        photo: profile.photos[0].value
+        photo: profile.photos[0].value,
+        twitter: {
+          id: profile.id,
+          token,
+          tokenSecret
+        }
       }).save();
   
       done(null, user);

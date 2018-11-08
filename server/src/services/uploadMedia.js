@@ -1,9 +1,11 @@
 const fs = require('fs');
 const download = require('download');
 const del = require('del');
-const twitterClient = require('./twitter-client');
+const { createTwitterClient } = require('../services/twitter-client.js');
 
-async function uploadMedia(gif) {
+async function uploadMedia(gif, token, tokenSecret) {
+
+  const twitterClient = createTwitterClient(token, tokenSecret);
 
   const downloadDir = './src/temp';
   const filename = 'foo.gif';

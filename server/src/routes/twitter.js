@@ -1,12 +1,19 @@
 const express = require('express');
 const router = express.Router();
+const config = require('config');
 const { uploadMedia } = require('../services/uploadMedia');
-const twitterClient = require('../services/twitter-client.js');
+const { createTwitterClient } = require('../services/twitter-client.js');
 const requireLogin = require('../middleware/requireLogin');
 
 router.get('/trends', (req, res) => {
   const woeid = '23424977'; // Yahoo! WOEID for United States
   // Gets the lastest twitter trends in the United States
+
+  const token = config.get('twitter.access_token_key');
+  const tokenSecret = config.get('twitter.access_token_secret');
+
+  const twitterClient = createTwitterClient(token, tokenSecret);
+
   twitterClient.get('trends/place', {id: woeid})
     .then( tweet => {
       const trends = tweet[0].trends.map((trend, index) => ({id: index, name: trend.name}));
@@ -25,7 +32,11 @@ router.get('/tweet', requireLogin, async (req, res) => {
 
 router.post('/tweet', async (req, res) => {
 
-  const mediaId = await uploadMedia(req.body.gif);
+  const { token, tokenSecret } = req.user.twitter;
+
+  const twitterClient = createTwitterClient(token, tokenSecret);
+
+  const mediaId = await uploadMedia(req.body.gif, token, tokenSecret);
   const status = {
     status: req.body.text,
     media_ids: mediaId
