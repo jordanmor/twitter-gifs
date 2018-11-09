@@ -3,10 +3,7 @@ import EmojiPicker from '../common/emojiPicker';
 
 const Textarea = props => {
 
-  const { textAreaText } = props;
-
-  const textAreaMaxLength = 280;
-  const totalChars = textAreaMaxLength - textAreaText.length;
+  const { textAreaText, totalChars } = props;
 
   return ( 
     <div className="textarea-container d-flex">
@@ -17,8 +14,7 @@ const Textarea = props => {
           id="tweetTextArea"
           required
           minLength="1"
-          maxLength={props.textAreaMaxLength} 
-          rows="5"
+          rows="6"
           name="tweet-text"
           value={textAreaText}
           onChange={props.onTextInputChange}
@@ -36,7 +32,7 @@ const Textarea = props => {
             showEmojiPicker={props.showEmojiPicker}
           />
         </div>
-        <span>{totalChars}</span>
+        <span className={totalChars < 0 ? 'text-danger' : ''}>{totalChars}</span>
       </div>
 
     </div>

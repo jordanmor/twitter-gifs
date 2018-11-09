@@ -61,6 +61,8 @@ i + i {
   border-color: var(--calm);
 }
 
+.btn.disabled, 
+.btn:disabled, 
 .btn-outline-secondary:hover,
 .btn-outline-secondary:not(:disabled):not(.disabled).active {
   background-color: var(--calm);

@@ -5,6 +5,9 @@ const Form = props => {
 
   const { textAreaText, gif, onSubmit } = props;
 
+  const textAreaMaxLength = 280;
+  const totalChars = textAreaMaxLength - textAreaText.length;
+
   return ( 
     <form className="tweet-form d-flex flex-column" onSubmit={onSubmit}>
 
@@ -17,6 +20,7 @@ const Form = props => {
           toggleEmojiPicker={props.toggleEmojiPicker}
           showEmojiPicker={props.showEmojiPicker}
           onAddEmoji={props.addEmoji}
+          totalChars={totalChars}
         />
 
         <div className="tweet-gif">
@@ -26,6 +30,7 @@ const Form = props => {
       </div>
 
       <button
+        disabled={totalChars < 0}
         type="submit" 
         className="tweet-btn btn btn-primary align-self-end"
       >Tweet
