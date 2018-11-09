@@ -2,6 +2,7 @@ const config = require('config');
 const passport = require('passport');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const User = require('../models/user');
+const { encrypt } = require('./encryption');
 const callbackRootUrl = config.get('callback_root_url');
 
 const twitterConsumerKey = config.get('twitter.consumer_key');
@@ -25,8 +26,8 @@ passport.use(new TwitterStrategy({
         photo: profile.photos[0].value,
         twitter: {
           id: profile.id,
-          token,
-          tokenSecret
+          token: encrypt(token),
+          tokenSecret: encrypt(tokenSecret)
         }
       }).save();
   

@@ -1,6 +1,7 @@
 {
   "mongodbUri": "MONGODB_URI",
   "cookieKey": "COOKIE_KEY",
+  "encryptionKey": "ENCRYPTION_KEY",
   "twitter": {
     "consumer_key": "TWITTER_CONSUMER_KEY",
     "consumer_secret": "TWITTER_CONSUMER_SECRET",

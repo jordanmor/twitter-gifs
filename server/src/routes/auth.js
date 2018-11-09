@@ -8,7 +8,8 @@ const rootUrl = config.get('root_url');
 router.get('/current_user', function(req, res){
   // User will only be attached to request if passport authenticates login
   if (req.user) {
-    res.status(200).send(req.user);
+    const { name, username, photo } = req.user;
+    res.status(200).send({name, username, photo});
   }
 });
 

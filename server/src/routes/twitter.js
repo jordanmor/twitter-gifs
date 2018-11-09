@@ -3,6 +3,7 @@ const router = express.Router();
 const config = require('config');
 const { uploadMedia } = require('../services/uploadMedia');
 const { createTwitterClient } = require('../services/twitter-client.js');
+const { decrypt } = require('../services/encryption');
 const requireLogin = require('../middleware/requireLogin');
 
 router.get('/trends', (req, res) => {
@@ -32,8 +33,8 @@ router.get('/tweet', requireLogin, async (req, res) => {
 
 router.post('/tweet', async (req, res) => {
 
-  const { token, tokenSecret } = req.user.twitter;
-
+  const token = decrypt(req.user.twitter.token);
+  const tokenSecret = decrypt(req.user.twitter.tokenSecret);
   const twitterClient = createTwitterClient(token, tokenSecret);
 
   const mediaId = await uploadMedia(req.body.gif, token, tokenSecret);
