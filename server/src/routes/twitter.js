@@ -37,7 +37,7 @@ router.post('/tweet', requireLogin, async (req, res, next) => {
     media_ids: mediaId
   };
 
-  twitterClient.post('statuses/update', status, function(error, tweet, response) {
+  twitterClient.post('statuses/update', status, function(error) {
     if (error) {
       const err = new Error('Error posting tweet.');
       err.status = 400;

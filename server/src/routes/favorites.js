@@ -23,7 +23,7 @@ router.post('/', requireLogin, (req, res, next) => {
       title: req.body.gif.title
     }
   });
-  favorite.save((err, favorite) => {
+  favorite.save((err) => {
     if (err) {
       err.status = 400;
       return next(err);
