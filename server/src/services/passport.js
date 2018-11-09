@@ -15,7 +15,7 @@ passport.use(new TwitterStrategy({
   }, 
   async function(token, tokenSecret, profile, done){
     
-    const existingUser = await User.findOne({ twitter: { id: profile.id }});
+    const existingUser = await User.findOne({ 'twitter.id': profile.id });
 
     if (existingUser) {
       done(null, existingUser);
