@@ -27,6 +27,6 @@
   "homepage": "https://github.com/jordanmor/twitter-gifs#readme",
   "devDependencies": {
     "concurrently": "^4.0.1",
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.6"
   }
 }
