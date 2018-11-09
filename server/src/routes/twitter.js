@@ -7,8 +7,8 @@ const { decrypt } = require('../services/encryption');
 const requireLogin = require('../middleware/requireLogin');
 
 router.get('/trends', (req, res) => {
-  const woeid = '23424977'; // Yahoo! WOEID for United States
   // Gets the lastest twitter trends in the United States
+  const woeid = '23424977'; // Yahoo! WOEID for United States
 
   const token = config.get('twitter.access_token_key');
   const tokenSecret = config.get('twitter.access_token_secret');
@@ -31,7 +31,7 @@ router.get('/tweet', requireLogin, async (req, res) => {
   res.send(tweet);
 });
 
-router.post('/tweet', async (req, res) => {
+router.post('/tweet', requireLogin, async (req, res) => {
 
   const token = decrypt(req.user.twitter.token);
   const tokenSecret = decrypt(req.user.twitter.tokenSecret);
