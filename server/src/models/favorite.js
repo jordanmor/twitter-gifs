@@ -19,6 +19,10 @@ const FavoriteSchema = new Schema({
       type: String,
       required: true
     },
+    uploadUrl: {
+      type: String,
+      required: true
+    },
     title: String
   }
 });

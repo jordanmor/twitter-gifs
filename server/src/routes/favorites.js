@@ -19,6 +19,7 @@ router.post('/', requireLogin, (req, res, next) => {
     gif: {
       id: req.body.gif.id,
       image: req.body.gif.image,
+      uploadUrl: req.body.gif.uploadUrl,
       title: req.body.gif.title
     }
   });

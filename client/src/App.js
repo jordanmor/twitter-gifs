@@ -24,7 +24,7 @@ class App extends Component {
     limit: {
       trends: 12,
       random: 4,
-      topicWithGifs: 12
+      topicWithGifs: 8
     },
     loading: false
   }
