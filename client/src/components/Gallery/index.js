@@ -4,9 +4,9 @@ import { ToastContainer } from 'react-toastify';
 
 const Gallery = props => {
 
-  const { data, user, category, location, onTopicClick, onPrepareTweet, onClickFavorite } = props;
+  const { data, category, location, onTopicClick, onPrepareTweet, onClickFavorite } = props;
  
-  if (category === "favorites" && !user) {
+  if (category === "favorites" && !props.user) {
     return (
       <div className="container favorites-page">
         Please log in to your Twitter account to see your favorites Twitter Gifs
