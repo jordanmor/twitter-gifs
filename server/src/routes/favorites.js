@@ -3,9 +3,9 @@ const router = express.Router();
 const Favorite = require('../models/favorite');
 const requireLogin = require('../middleware/requireLogin');
 
-router.get('/', requireLogin, async (req, res, next) => {
+router.get('/', requireLogin, async (req, res) => {
   const favorites = await Favorite.find()
-  .where('user').equals(req.user._id);
+    .where('user').equals(req.user._id);
   res.send(favorites);
 });
 
@@ -33,14 +33,14 @@ router.post('/', requireLogin, (req, res, next) => {
 });
 
 // DELETE / - delete a favorite
-router.delete('/:id', requireLogin, async (req, res, next) => {
+router.delete('/:id', requireLogin, async (req, res) => {
   
   const favorite = await Favorite.findByIdAndRemove(req.params.id);
 
   if (!favorite) {
     return res
       .status(404)
-      .send("The favorite with the given ID was not found.");
+      .send('The favorite with the given ID was not found.');
   }
   res.send(favorite);
 });

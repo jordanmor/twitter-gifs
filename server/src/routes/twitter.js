@@ -25,13 +25,7 @@ router.get('/trends', (req, res) => {
     });
 });
 
-router.get('/tweet', requireLogin, async (req, res) => {
-  const tweet = await Tweet.find()
-  .where('user').equals(req.user._id);
-  res.send(tweet);
-});
-
-router.post('/tweet', requireLogin, async (req, res) => {
+router.post('/tweet', requireLogin, async (req, res, next) => {
 
   const token = decrypt(req.user.twitter.token);
   const tokenSecret = decrypt(req.user.twitter.tokenSecret);
@@ -41,12 +35,13 @@ router.post('/tweet', requireLogin, async (req, res) => {
   const status = {
     status: req.body.text,
     media_ids: mediaId
-  }
+  };
 
   twitterClient.post('statuses/update', status, function(error, tweet, response) {
     if (error) {
-      console.log("Error posting tweet");
-      res.status(400).send(error);
+      const err = new Error('Error posting tweet.');
+      err.status = 400;
+      return next(err);
     } else {
       res.status(201).send('Tweet Posted!');
     }
