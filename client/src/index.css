@@ -176,6 +176,26 @@ main {
   font-size: 1.2rem;
 }
 
+.card-body {
+  padding: 1.5rem 1.25rem;
+}
+
+.card-body .btn {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.card-body p {
+  margin: 0;
+}
+
+.card-body span {
+  max-width: 100%;
+  text-align: left;
+}
+
 .card-img-top {
   border-top-left-radius: 0;
   border-top-right-radius: 0;

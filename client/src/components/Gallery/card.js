@@ -13,13 +13,13 @@ const Card = props => {
         <Like liked={liked} onClick={() => props.onClickFavorite(data)} />
       </div>
       <img className="card-img-top" src={gif.image} alt={gif.title} />
-      <div className="card-body text-center">
+      <div className="card-body">
         {
           props.onTopicClick 
             ?
               <button onClick={() => props.onTopicClick(topic, location)} type="button" className="btn btn-outline-secondary">{topic}</button>
             :
-              <p className="">{topic}</p>
+              <p className="d-flex justify-content-center"><span>{topic}</span></p>
         }
       </div>
     </div>
