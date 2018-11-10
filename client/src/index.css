@@ -34,9 +34,9 @@ i + i {
 /* --- Buttons --- */
 
 .btn-primary {
+  color: var(--off-white);
   background-color: var(--calm);
   border-color: var(--calm);
-  color: var(--off-white);
 }
 
 .btn-primary:hover {
@@ -69,6 +69,22 @@ i + i {
   border-color: var(--calm);
 }
 
+/* --- Toastify --- */
+
+.Toastify__toast {
+  border-radius: 4px;
+}
+
+.Toastify__toast--default {
+  color: var(--calm-darker);
+  background: var(--off-white);
+  border: 8px solid var(--calm-darker);
+}
+
+.Toastify__close-button {
+  color: var(--calm-darker);
+}
+
 /*============-============-============-============
                         NAVBAR
 ==============-============-============-==========*/
@@ -88,26 +104,13 @@ i + i {
 
 .navbar-brand {
   font-family: 'Luckiest Guy', cursive;
-  letter-spacing: .1rem;
   font-size: 1.4rem;
   font-weight: bold;
-  position: absolute;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%); 
-  color: var(--off-white);
+  letter-spacing: .1rem;
+  color: var(--off-white); 
 }
 
-.navbar-collapse {
-  justify-content: space-between;
-}  
-
-.login i,
-.login > a {
-  color: var(--off-white);
-}
-
-.fa-user {
+.navbar .fa-user {
   color: var(--off-white);
   font-size: 1.8rem;
   cursor: default;
@@ -144,7 +147,7 @@ i + i {
   margin-bottom: 1rem;
 }
 
-.favorites .badge-secondary {
+.favorites span.badge-secondary {
   color: var(--calm);
   background-color: var(--off-white);
   border: 1px solid var(--calm);
@@ -163,6 +166,8 @@ main {
   padding: 1rem;
 }
 
+/* --- Card --- */
+
 .card {
   border-color: var(--calm-border-light);
 }
@@ -180,21 +185,23 @@ main {
   column-count: 1;
 }
 
-.fa-twitter {
+.card .fa-twitter {
   font-size: 1.4rem;
 }
 
-.fa-heart-o,
-.fa-twitter {
+.card .fa-heart-o,
+.card .fa-twitter {
   transform-origin: center center;
   transition: .25s ease-out;
 }
 
-.fa-heart-o:hover,
-.fa-twitter:hover  {
+.card .fa-heart-o:hover,
+.card .fa-twitter:hover  {
   color: var(--calm-darker);
   transform: scale(1.02);
 }
+
+/* --- Profile / Favorites / Success Page --- */
 
 .profile-page,
 .favorites-page {
@@ -203,15 +210,18 @@ main {
   color: var(--calm-darker); 
 }
 
-.favorites-page {
-  height: 300px;
-}
-
 .profile-photo {
   width: 250px;
   height: 250px;
   border-radius: 100%;
 }
+
+.favorites-page,
+.success {
+  height: 300px;
+}
+
+/* --- Tweets --- */
 
 .tweet-container {
   width: 600px;
@@ -219,11 +229,6 @@ main {
   border-radius: 4px;
   background-color: #E3F0FA;
   box-shadow: 0 18px 40px 5px rgba(0,0,0,.4);
-}
-
-.tweet-photo {
-  border-radius: 100%;
-  margin-right: 1.4rem;
 }
 
 .tweet-header {
@@ -241,16 +246,23 @@ main {
 }
 
 .tweet-header span {
+  font-size: 1.3rem;
+  color: var(--calm);
   position: absolute;
   top: 9px;
   right: 12px;
-  font-size: 1.3rem;
-  color: var(--calm);
 }
 
 .tweet-body {
   padding: 1rem;
 }
+
+.tweet-photo {
+  border-radius: 100%;
+  margin-right: 1.4rem;
+}
+
+/* --- Tweet Form --- */
 
 .tweet-form .form-group {
   width: 430px;
@@ -263,24 +275,12 @@ main {
   box-shadow: none;
 }
 
-.tweet-form .textArea1 {
+.tweet-form textarea {
   font-size: .9rem;
   background-color: var(--off-white);
   border: none;
   box-shadow: none;
   resize: none;
-}
-
-.textarea-main {
-  flex-basis: 90%;
-  color: #495057;
-}
-
-.textarea-side {
-  flex-basis: 10%;
-  color: #495057;
-  background-color: var(--off-white);
-  padding: .375rem .75rem
 }
 
 .tweet-form .tweet-gif {
@@ -304,6 +304,22 @@ main {
   background-color: var(--calm);
 }
 
+/* --- Text area --- */
+
+.textarea-main {
+  flex-basis: 90%;
+  color: #495057;
+}
+
+.textarea-side {
+  flex-basis: 10%;
+  color: #495057;
+  background-color: var(--off-white);
+  padding: .375rem .75rem
+}
+
+/* --- Emoji-mart --- */
+
 .emoji-container {
   position: relative;
 }
@@ -317,24 +333,6 @@ main {
 
 .emoji-mart-title-label {
   font-size: 18px;
-}
-
-.success {
-  height: 300px;
-}
-
-.Toastify__toast {
-  border-radius: 4px;
-}
-
-.Toastify__toast--default {
-  color: var(--calm-darker);
-  background: var(--off-white);
-  border: 8px solid var(--calm-darker);
-}
-
-.Toastify__close-button {
-  color: var(--calm-darker);
 }
 
 /*============-============-============-============
@@ -375,6 +373,28 @@ footer p {
                      MEDIA QUERIES
 ==============-============-============-==========*/
 
+@media (max-width: 500px) {
+  .navbar-brand {
+    position: absolute;
+    left: 0;
+  }
+}
+
+@media (min-width: 500px) {
+  .navbar-brand {
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%); 
+  }
+}
+
+@media (min-width: 601px) {
+  .card-columns {
+    column-count: 2;
+  }
+}
+
 @media (max-width: 767px) {
   .navbar {
     height: 110px;
@@ -386,11 +406,11 @@ footer p {
     bottom: 10px;
     left: 0;
   }
-}
-
-@media (min-width: 601px) {
-  .card-columns {
-    column-count: 2;
+  .nav-bottom .nav-item {
+    margin-bottom: .5rem;
+  }
+  .nav-bottom .nav-item .btn {
+    width: 100%;
   }
 }
 
@@ -403,11 +423,6 @@ footer p {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-  }
-  .nav-bottom button {
-    display: inline-block;
-    width: auto;
-    margin-bottom: 0;
   }
   .nav-bottom .nav-item + .nav-item {
     margin-left: .5rem;
@@ -424,6 +439,13 @@ footer p {
     column-count: 3;
   }
 }
+
+@media (max-width: 991px) {
+  .navbar .fa-user {
+    display: none;
+  }
+}
+
 
 @media (min-width: 992px) {
 

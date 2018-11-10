@@ -22,9 +22,9 @@ class App extends Component {
     topicWithGifs: [],
     message: '',
     limit: {
-      trends: 12,
+      trends: 4,
       random: 4,
-      topicWithGifs: 8
+      topicWithGifs: 4
     },
     loading: false
   }

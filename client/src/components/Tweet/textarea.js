@@ -10,7 +10,7 @@ const Textarea = props => {
 
       <div className="textarea-main">
         <textarea 
-          className="form-control textArea1" 
+          className="form-control" 
           id="tweetTextArea"
           required
           minLength="1"
