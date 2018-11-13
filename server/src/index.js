@@ -27,11 +27,11 @@ mongoose.connect(mongodbUri, { useNewUrlParser: true });
 const db = mongoose.connection;
 
 db.on('error', (err) => {
-    console.error('connection error:', err);
+  console.error('connection error:', err);
 });
 
 db.once('open', () => {
-    console.log('db connection successful');
+  console.log('db connection successful');
 });
 
 const cookieKey = config.get('cookieKey');
@@ -64,8 +64,8 @@ app.use('/*', staticFiles);
 app.use((req, res) => {
   res.status(404).json({
     message: 'Route Not Found'
-  })
-})
+  });
+});
 
 // global error handler
 app.use((err, req, res, next) => {

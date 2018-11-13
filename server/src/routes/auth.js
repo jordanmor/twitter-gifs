@@ -22,7 +22,7 @@ router.get('/twitter/return',
   passport.authenticate('twitter', { failureRedirect: '/' }),
   function(req, res) {
     res.redirect(`${rootUrl}profile`);
-});
+  });
 
 //GET api/auth/logout
 router.get('/logout', function(req, res){

@@ -21,7 +21,7 @@ async function uploadMedia(gif, token, tokenSecret) {
 
   const mediaId = await initUpload() // Declare that you wish to upload some media
     .then(appendUpload) // Send the data for the media
-    .then(finalizeUpload) // Declare that you are done uploading chunks
+    .then(finalizeUpload); // Declare that you are done uploading chunks
 
   await del([pathToGif]);
 
@@ -55,7 +55,7 @@ async function uploadMedia(gif, token, tokenSecret) {
   // (Utility function) Send a POST request to the Twitter API
   function makePost (endpoint, params) {
     return new Promise((resolve, reject) => {
-      twitterClient.post(endpoint, params, (error, data, response) => {
+      twitterClient.post(endpoint, params, (error, data) => {
         if (error) {
           reject(error);
         } else {

@@ -6,8 +6,8 @@ const IV_LENGTH = 16; // For AES, this is always 16
 
 function encrypt(value){
   const iv = crypto.randomBytes(IV_LENGTH);
-  const cipher = crypto.createCipheriv(algorithm, key, iv)
-  let crypted = cipher.update(value,'utf8','hex')
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  let crypted = cipher.update(value,'utf8','hex');
   crypted += cipher.final('hex');
   return `${iv.toString('hex')}:${crypted.toString()}`;
 }
@@ -22,8 +22,8 @@ function decrypt(value){
   const encryptedText = Buffer.from(textParts.join(':'), 'hex');
 
   //decipher the string
-  var decipher = crypto.createDecipheriv(algorithm, key, IV)
-  var decrypted = decipher.update(encryptedText,'hex','utf8')
+  var decipher = crypto.createDecipheriv(algorithm, key, IV);
+  var decrypted = decipher.update(encryptedText,'hex','utf8');
   decrypted += decipher.final('utf8');
   return decrypted.toString();
 }

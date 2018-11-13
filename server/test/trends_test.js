@@ -1,6 +1,5 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const mongoose = require('mongoose');
 
 const app = require('../src/index');
 
@@ -36,8 +35,8 @@ describe('POST /api/twitter/tweets', function () {
       // No Passport authentication
       .type('form')
       .send({
-        text:"#snow",
-        gif:"https://media3.giphy.com/media/14uJKhQMZ1wLfO/giphy-downsized.gif"
+        text:'#snow',
+        gif:'https://media3.giphy.com/media/14uJKhQMZ1wLfO/giphy-downsized.gif'
       })
       .end( (err, res) => {
         expect(res).to.have.status(401);
