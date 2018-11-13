@@ -4,7 +4,7 @@ The latest Twitter trends matched with GIFs
 
 Treehouse Full Stack JavaScript Techdegree - Project 12 (Capstone Project)
 
-##Main Project Goals**
+## Main Project Goals
 - Build all aspects of the site, including an interactive front end
 - Use a responsive front end framework to style your app, adding your own CSS to give your app a unique look
 - On the backend, manage data with a database and connect to at least two APIs
@@ -12,16 +12,17 @@ Treehouse Full Stack JavaScript Techdegree - Project 12 (Capstone Project)
 - Make your application available at a public URL
 
 **Reviewer Notes**
+- Browsers Used to check project: Google Chrome, Mozilla Firefox & Safari
 - Extra Credit
   - Three APIs were used for this project
     - Twitter, Giphy and Wordnik
   - Custom CSS was written to further style the default Bootstrap style
-  - HTML5 validation was used on the following fields
+  - HTML5 validation was used on the following fields:
     - textarea used for posting a tweet with a GIF
     - search input
   - Unit tests were written using Mocha and Chai
 
-Public URL: https://twittergifs.herokuapp.com/
+**Public URL:** https://twittergifs.herokuapp.com/
 
 ---
 ## Installation Instructions:
@@ -35,6 +36,7 @@ Public URL: https://twittergifs.herokuapp.com/
     - Ex. `/server/config/development.json`
 
 5. Add the link to your remote database, a cookie key, an encryption key and your twitter developer keys to the `development.json` file
+    - Your encryption key must be 256 bytes (32 characters)
 ```
   // -- This file will be ignored in subsequent git commits -- //
 
@@ -78,7 +80,8 @@ Public URL: https://twittergifs.herokuapp.com/
 
 2. Open up a new tab in your terminal
 
-3. Run the server (Node) and the client (React) in the same tab using the command: `npm start`
+3. Run the program using the command: `npm start`. 
+    - This will run the server (Node) and the client (React) in the same tab.
 
 ---
 
@@ -113,7 +116,7 @@ There are two ways to set the config vars for Heroku
   "callback_root_url": "https://name-of-your-heroku-app.herokuapp.com/"
 }
 ```
-5. Do to your Twitter developer account and create an app for the production phase of this project.
+5. Go to your Twitter developer account and create an app for the production phase of this project.
 
 6. In the App details section of your Twitter Developer App, (for production), make sure the **callback URL** is set to `https://name-of-your-heroku-app.herokuapp.com/api/auth/twitter/return` and that your permissions are set to **read and write**.
 ---
