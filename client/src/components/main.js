@@ -110,7 +110,8 @@ const Main = props => {
         </Route>
         <Route 
           exact path="/"
-          render={() => <Redirect to="/trends" /> }>
+          render={() => <Redirect to="/trends" /> }
+        >
         </Route>
       </Switch>
     </main>

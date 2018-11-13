@@ -9,7 +9,7 @@ const Gallery = props => {
   if (category === "favorites" && !props.user) {
     return (
       <div className="container favorites-page">
-        Please log in to your Twitter account to see your favorites Twitter Gifs
+        Please log in with your Twitter account to see your favorites Twitter Gifs
       </div>
     );
   }

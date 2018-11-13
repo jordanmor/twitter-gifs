@@ -22,9 +22,9 @@ class App extends Component {
     topicWithGifs: [],
     message: '',
     limit: {
-      trends: 8,
-      random: 8,
-      topicWithGifs: 8
+      trends: 2,
+      random: 2,
+      topicWithGifs: 2
     },
     loading: false
   }
@@ -176,7 +176,7 @@ class App extends Component {
           categories.forEach(category => this.updateLikedStatus(category));
         }
     } else {
-        toast("Please log in to your Twitter account to save your favorite Twitter GIFs.");
+        toast("Please log in with your Twitter account to save your favorite Twitter GIFs.");
     }
   }
 
