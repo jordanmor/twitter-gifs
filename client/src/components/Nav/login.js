@@ -9,7 +9,7 @@ const Login = props => {
         <Link to="/profile">
           <img className="user-photo" src={props.user.photo} alt=""/>
         </Link>
-        <a href={`${rootUrl}api/auth/logout`} className="btn btn-outline-primary ml-3">Logout</a>
+        <a href={`${rootUrl}api/auth/logout`} onClick={props.onLogout} className="btn btn-outline-primary ml-3">Logout</a>
       </div>
     );
   }
@@ -17,7 +17,7 @@ const Login = props => {
   return (
     <div className="d-flex align-items-center">
       <i className="fa fa-user"></i>
-      <a href={`${rootUrl}api/auth/login/twitter`} className="btn btn-outline-primary ml-3">Login to Twitter</a>
+      <a href={`${rootUrl}api/auth/login/twitter`} onClick={props.onLogin} className="btn btn-outline-primary ml-3">Login to Twitter</a>
     </div>
   );
 }

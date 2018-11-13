@@ -5,7 +5,7 @@ import SearchForm from './searchForm';
 
 const Nav = props => {
 
-  const { count, user, onSearch } = props;
+  const { count, user, onSearch, onLogout, onLogin } = props;
 
   return ( 
     <React.Fragment>
@@ -17,7 +17,7 @@ const Nav = props => {
 
             <SearchForm onSearch={onSearch} />
             
-            <Login user={user} />
+            <Login user={user} onLogin={onLogin} onLogout={onLogout}/>
           </nav>
         </div>
       </div>

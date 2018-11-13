@@ -181,15 +181,27 @@ class App extends Component {
     }
   }
 
-  getUser = async() => {
-    let user;
-    // Get user from api and store in state
-    const response = await axios.get('/api/auth/current_user');
+  handleLogin = () => {
+    sessionStorage.setItem('user', 'true');
+  }
 
-    if (response.status === 200 ) {
-      user = response.data;
-      this.setState({ user });
-      this.getFavorites(); // only load favorites when user logs in
+  handleLogout = () => {
+    sessionStorage.removeItem('user');
+  }
+
+  getUser = async() => {
+    const loggedIn = sessionStorage.getItem('user');
+    let user;
+    if(loggedIn) {
+      // Get user from api and store in state
+      const response = await axios.get('/api/auth/current_user');
+      if (response.status === 200 ) {
+        user = response.data;
+        this.setState({ user });
+        this.getFavorites(); // only load favorites when user logs in
+      } else {
+        this.setState({ user: '' });
+      }
     } else {
       this.setState({ user: '' });
     }
@@ -205,6 +217,8 @@ class App extends Component {
             onSearch={this.handleTopicClick}
             count={favorites.length}
             user={user}
+            onLogin={this.handleLogin}
+            onLogout={this.handleLogout}
           />
         </header>
         { loading
