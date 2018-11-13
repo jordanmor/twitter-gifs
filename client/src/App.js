@@ -92,7 +92,8 @@ class App extends Component {
 
   handleTopicClick = (topic, pathname) => {
     this.getTopicWithGifs(topic);
-    const topicHashReplaced = topic.replace('#', 'hashtag_')
+    const topicHashReplaced = topic.replace('#', 'hashtag_');
+    pathname = pathname.replace(/\/$/, '');
     const path = `${pathname}/${topicHashReplaced}`;
     sessionStorage.setItem('topic', topic);
     this.props.history.push(path);
