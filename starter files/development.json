@@ -1,0 +1,13 @@
+{
+  "mongodbRemote": "",
+  "cookieKey": "",
+  "encryptionKey": "",
+  "twitter": {
+    "consumer_key": "",
+    "consumer_secret": "",
+    "access_token_key": "",
+    "access_token_secret": ""
+  },
+  "root_url": "http://localhost:3000/",
+  "callback_root_url": "http://localhost:5000/"
+}
