@@ -17,7 +17,7 @@ Treehouse Full Stack JavaScript Techdegree - Project 12 (Capstone Project)
   - Three APIs were used for this project
     - Twitter, Giphy and Wordnik
   - Custom CSS was written to further style the default Bootstrap style
-  - HTML5 validation was used on the following fields:
+  - HTML5 validation (used required and min length to block form submission   if form inputs left empty) was used on the following fields:
     - textarea used for posting a tweet with a GIF
     - search input
   - Unit tests were written using Mocha and Chai
@@ -96,7 +96,7 @@ There are two ways to set the config vars for Heroku
   
       - Refer to Heroku's Dev Center: https://devcenter.heroku.com/articles/config-vars
 
-  3. Add the following config vars to your Heroku site with the same keys used in the `development.json` file:
+  3. Add the following config vars to your Heroku site with the same keys used in the `development.json` and `env.local`files:
    
 ```
   MONGODB_URI=
@@ -108,9 +108,9 @@ There are two ways to set the config vars for Heroku
   TWITTER_ACCESS_TOKEN_SECRET=
   REACT_APP_GIPHY_APIKEY=
   REACT_APP_WORDNIK_APIKEY=
-  REACT_APP_ROOT_URL=/  (Set this final config var to the root folder / )
+  REACT_APP_ROOT_URL=/  ( This final config var should already be set to the root folder / )
 ```
-4. Add the root of your Twitter callback URL in the file named `production.json`, which is found in `/server/config`.
+4. Add the root URL of your Twitter callback URL in the file named `production.json`, which is found in `/server/config`.
 ```
 {
   "callback_root_url": "https://name-of-your-heroku-app.herokuapp.com/"
