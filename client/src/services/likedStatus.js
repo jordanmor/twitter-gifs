@@ -1,5 +1,9 @@
-// Check each card with cards saved in favorites. If topic and gif id match, the card status is liked
-// Card is also given id of favorite saved in database
+/* 
+* The given twitterGif is matched against all of the current user's favorites saved in the database.
+* If a favorite has the same topic and gif id as the twitterGif, the twitterGif's liked status
+* is changed to true and it's id is changed to the matched favorite's id
+*/
+
 function matchLikedStatusWithFavorites(favorites, twitterGif) {
 
   const { id, topic, gif } = twitterGif;

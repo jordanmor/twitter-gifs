@@ -6,7 +6,8 @@ const { createTwitterClient } = require('../services/twitter-client.js');
 const { decrypt } = require('../services/encryption');
 const requireLogin = require('../middleware/requireLogin');
 
-router.get('/trends', (req, res) => {
+//GET /api/twitter/trends
+router.get('/trends', (req, res, next) => {
   // Gets the lastest twitter trends in the United States
   const woeid = '23424977'; // Yahoo! WOEID for United States
 
@@ -21,17 +22,36 @@ router.get('/trends', (req, res) => {
       res.send(trends);
     })
     .catch( error => {
-      throw error;
+      if(error) {
+        const err = new Error('Error getting twitter trends.');
+        err.status = 400;
+        return next(err);
+      }
     });
 });
 
+//POST /api/twitter/tweet
 router.post('/tweet', requireLogin, async (req, res, next) => {
 
+  // Current authorized user's twitter token and token secret
   const token = decrypt(req.user.twitter.token);
   const tokenSecret = decrypt(req.user.twitter.tokenSecret);
+
   const twitterClient = createTwitterClient(token, tokenSecret);
 
-  const mediaId = await uploadMedia(req.body.gif, token, tokenSecret);
+  let mediaId;
+  try {
+    // Media (GIF) is uploaded to Twitter before posting tweet's text
+    mediaId = await uploadMedia(req.body.gif, token, tokenSecret);
+  } 
+  catch (err) {
+    if(err) {
+      const err = new Error('There was an error uploading this GIF');
+      err.status = 400;
+      next(err);
+    }
+  }
+
   const status = {
     status: req.body.text,
     media_ids: mediaId

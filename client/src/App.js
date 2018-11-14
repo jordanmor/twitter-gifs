@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import Main from './components/main';
-import Nav from './components/Nav';
-import Footer from './components/footer';
-import Loader from './components/common/loader';
-import { getTrends, cleanName } from './services/trendsService';
+import { getTrends } from './services/trendsService';
 import { getGifs } from './services/giphyService';
 import { getRandomWords } from './services/wordnikService';
+import { formatText } from './services/formatText';
 import { matchLikedStatusWithFavorites } from './services/likedStatus';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import uniqueString from 'unique-string';
+
+import Main from './components/main';
+import Nav from './components/Nav';
+import Footer from './components/footer';
+import Loader from './components/common/loader';
 
 class App extends Component {
 
@@ -21,12 +23,12 @@ class App extends Component {
     randomWordsWithGif: [],
     topicWithGifs: [],
     message: '',
+    loading: false,
     limit: {
-      trends: 2,
-      random: 2,
-      topicWithGifs: 2
-    },
-    loading: false
+      trends: 8,
+      random: 4,
+      topicWithGifs: 8
+    }
   }
 
   componentDidMount() {
@@ -40,12 +42,16 @@ class App extends Component {
     this.setState({ loading: true });
     const trends = await getTrends(this.state.limit.trends);
 
+    // Pair each twitter trend with a GIF and save into an array
+    // If no GIF is found for a given topic, that topic is not included in the array
     const trendsWithGif = await trends.reduce( async (result, trend) => {
       const collection = await result;
-      const trendName = cleanName(trend.name);
+      const trendName = formatText(trend.name);
       const gif = await getGifs(trendName, 1);
       if (gif[0]) {
         const twitterGif = {id: trend.id, topic: trend.name, gif: gif[0]};
+        /* If twitterGif is matched with a favorite, it's liked status is changed to true 
+           and it's id is changed to the favorite's id */
         collection.push(matchLikedStatusWithFavorites(this.state.favorites, twitterGif));
       }
       return collection;
@@ -58,12 +64,16 @@ class App extends Component {
     this.setState({ loading: true });
     const randomWords = await getRandomWords(this.state.limit.random);
 
+    // Pair each random word with a GIF and save into an array
+    // If no GIF is found for a given topic, that topic is not included in the array
     const randomWordsWithGif = await randomWords.reduce( async (result, randomWord) => {
       const collection = await result;
       const { id, word: topic } = randomWord;
       const gif = await getGifs(topic, 1);
       if (gif[0]) {
         const twitterGif = {id, topic, gif: gif[0]};
+        /* If twitterGif is matched with a favorite, it's liked status is changed to true 
+           and it's id is changed to the favorite's id */
         collection.push(matchLikedStatusWithFavorites(this.state.favorites, twitterGif));
       }
       return collection;
@@ -74,17 +84,21 @@ class App extends Component {
 
   getTopicWithGifs = async topic => {
     this.setState({ loading: true });
-    const topicName = cleanName(topic);
+    const topicName = formatText(topic);
 
+    // Pair mulitple instances of a chosen topic with a GIF and save into an array
     const gifs = await getGifs(topicName, this.state.limit.topicWithGifs);
     const topicWithGifs = gifs.map(gif => {
       const twitterGif = {id: gif.id, topic, gif};
+      /* If twitterGif is matched with a favorite, it's liked status is changed to true 
+           and it's id is changed to the favorite's id */
       return matchLikedStatusWithFavorites(this.state.favorites, twitterGif);
     });
 
     this.setState({ topicWithGifs, loading: false });
   }
 
+  // Preserve page with a chosen topic after a page refresh
   cacheTopicWithGifsPage = () => {
     const topic = sessionStorage.getItem('topic');
     if(topic) this.getTopicWithGifs(topic);
@@ -105,7 +119,7 @@ class App extends Component {
       sessionStorage.setItem('gif', gif);
       this.props.history.push('/tweet');
     } else {
-        toast("Please log in to your Twitter account to post tweets.");
+        toast("Please log in with your Twitter account to post tweets.");
     }
   }
 
@@ -119,22 +133,8 @@ class App extends Component {
     }, 1000);
   }
 
-  changeLikedStatus = (id, category) => {
-    // Find clicked card and change liked status in state
-   const twitterGifs = this.state[category].map(twitterGif => {
-     if(twitterGif.id === id) {
-       twitterGif.liked = !twitterGif.liked;
-       twitterGif.id = uniqueString();
-       return twitterGif;
-     } else {
-       return twitterGif;
-     }
-   });
-   this.setState({ [category]: twitterGifs })
- }
-
   getFavorites = async () => {
-    // Get favorites from api and store in state
+    // Get favorites from api, add a liked status of true and store in state
     const { data } = await axios.get('/api/favorites');
     const favorites = data.map(favorite =>
       ({id: favorite._id, topic: favorite.topic, gif: favorite.gif, liked: true })
@@ -150,14 +150,6 @@ class App extends Component {
   saveFavorite = async (topic, gif) => {
     await axios.post('/api/favorites', {topic, gif});
     await this.getFavorites();
-  }
-
-  updateLikedStatus = category => {
-    // Update relevant category's state to reflect new liked card
-    const twitterGifs = this.state[category].map( twitterGif =>
-      matchLikedStatusWithFavorites(this.state.favorites, twitterGif));
-
-    this.setState({ [category]: twitterGifs });
   }
 
   handleClickFavorite = async data => {
@@ -179,6 +171,32 @@ class App extends Component {
     } else {
         toast("Please log in with your Twitter account to save your favorite Twitter GIFs.");
     }
+  }
+
+  changeLikedStatus = (id, category) => {
+    // Find clicked card (twitterGif) and change liked status in state
+   const twitterGifs = this.state[category].map(twitterGif => {
+     if(twitterGif.id === id) {
+       twitterGif.liked = !twitterGif.liked;
+       /* When a favorite is deleted, any twitterGif's that matched that favorite
+       will also have that favorite's id. To avoid more than one twitterGif from 
+       having the same id, each twitterGif with the deleted favorite's id will be 
+       assigned a new unique id */
+       twitterGif.id = uniqueString();
+       return twitterGif;
+     } else {
+       return twitterGif;
+     }
+   });
+   this.setState({ [category]: twitterGifs });
+  }
+
+  updateLikedStatus = category => {
+    // Update relevant category's state to reflect new liked card (twitterGif)
+    const twitterGifs = this.state[category].map( twitterGif =>
+      matchLikedStatusWithFavorites(this.state.favorites, twitterGif));
+
+    this.setState({ [category]: twitterGifs });
   }
 
   handleLogin = () => {

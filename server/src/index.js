@@ -34,6 +34,7 @@ db.once('open', () => {
   console.log('db connection successful');
 });
 
+// A cookie is used to authorize a user's client-side requests in the browser
 const cookieKey = config.get('cookieKey');
 app.use(
   cookieSession({

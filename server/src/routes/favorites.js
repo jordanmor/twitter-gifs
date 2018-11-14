@@ -3,13 +3,14 @@ const router = express.Router();
 const Favorite = require('../models/favorite');
 const requireLogin = require('../middleware/requireLogin');
 
+// GET /api/favorites - get all favorites that have authorized user's id
 router.get('/', requireLogin, async (req, res) => {
   const favorites = await Favorite.find()
     .where('user').equals(req.user._id);
   res.send(favorites);
 });
 
-// POST / - create a new favorite
+// POST /api/favorites - create a new favorite
 router.post('/', requireLogin, (req, res, next) => {
   // Add current authorized user's id to request body
   req.body.user = req.user._id;
@@ -18,8 +19,8 @@ router.post('/', requireLogin, (req, res, next) => {
     topic: req.body.topic,
     gif: {
       id: req.body.gif.id,
-      image: req.body.gif.image,
-      uploadUrl: req.body.gif.uploadUrl,
+      image: req.body.gif.image, // used for displaying GIF
+      uploadUrl: req.body.gif.uploadUrl, // for posting tweets - file size under 2MB
       title: req.body.gif.title
     }
   });
@@ -32,7 +33,7 @@ router.post('/', requireLogin, (req, res, next) => {
   });
 });
 
-// DELETE / - delete a favorite
+// DELETE /api/favorites/:id - delete a favorite
 router.delete('/:id', requireLogin, async (req, res) => {
   
   const favorite = await Favorite.findByIdAndRemove(req.params.id);
