@@ -11,16 +11,8 @@ Treehouse Full Stack JavaScript Techdegree - Project 12 (Capstone Project)
 - Manage your app's data with a database
 - Make your application available at a public URL
 
-**Reviewer Notes**
-- Browsers Used to check project: Google Chrome, Mozilla Firefox & Safari
-- Extra Credit
-  - Three APIs were used for this project
-    - Twitter, Giphy and Wordnik
-  - Custom CSS was written to further style the default Bootstrap style
-  - HTML5 validation (used required and min length to block form submission   if form inputs left empty) was used on the following fields:
-    - textarea used for posting a tweet with a GIF
-    - search input
-  - Unit tests were written using Mocha and Chai
+**Project Completed:** 11/14/2018  
+**Grade:** Exceeds Expectations
 
 **Public URL:** https://twittergifs.herokuapp.com/
 
